@@ -1133,14 +1133,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4900968187638048}
-  - component: {fileID: 114294445839238978}
   - component: {fileID: 95524184265922550}
   - component: {fileID: 114182220230998702}
   - component: {fileID: 114711190903510414}
   - component: {fileID: 54596433817255390}
   - component: {fileID: 136163008178655612}
   m_Layer: 9
-  m_Name: vThirdPersonController
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2408,7 +2407,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1851629487560984}
   m_LocalRotation: {x: -0, y: -1, z: 0, w: -0.00000010430813}
-  m_LocalPosition: {x: 25, y: 0, z: 25}
+  m_LocalPosition: {x: -2, y: 0, z: 8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4261985933213594}
@@ -2593,22 +2592,6 @@ MonoBehaviour:
   direction: 0
   verticalVelocity: 0
   velocity: 0
---- !u!114 &114294445839238978
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1851629487560984}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19c789670a80b704eba4dfebed94a111, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  comment: "Hi there :)\n\nThank you for downloading our Third Person Controller,
-    don't forget to leave a review if you like our work. We hope that this Free version
-    can help you start your project.\n \nBest regards, \nInvector Team\n\nvStore:
-    https://sellfy.com//invector\nvForum: http://invector.proboards.com/\r\nvWebsite:
-    http://www.invector.xyz/"
 --- !u!114 &114711190903510414
 MonoBehaviour:
   m_ObjectHideFlags: 1
