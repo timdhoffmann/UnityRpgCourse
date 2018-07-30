@@ -5,8 +5,8 @@ public class CameraRaycaster : MonoBehaviour
     #region FIELDS
     [SerializeField] private Layer[] _layerPriorities =
     {
+        Layer.Walkable,
         Layer.Enemy,
-        Layer.Walkable
     };
     [SerializeField] private float _distanceToBackground = 100f;
     private Camera _viewCamera;
