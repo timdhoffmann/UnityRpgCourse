@@ -51,3 +51,7 @@ ehthumbs.db
 # ======= #
 *__NoVersionControl*
 Assets/Plugins*
+
+Assets/ProBuilder Data/
+
+Assets/ProBuilder Data\.meta
