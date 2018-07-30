@@ -17,6 +17,6 @@ public class CustomCursor : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-        Debug.Log(_cameraRaycaster.LayerHit);
+
 	}
 }

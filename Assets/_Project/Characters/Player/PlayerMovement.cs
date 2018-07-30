@@ -1,32 +1,43 @@
 using System;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Invector.CharacterController
 {
-    [RequireComponent(typeof (ThirdPersonCharacter))]
+    [RequireComponent(typeof (vThirdPersonController))]
     public class PlayerMovement : MonoBehaviour
     {
     
-        vThirdPersonController _controller;   // A reference to the ThirdPersonCharacter on the object
-        CameraRaycaster cameraRaycaster;
-        Vector3 currentClickTarget;
+        vThirdPersonController _controller;
+        CameraRaycaster _cameraRaycaster;
+        Vector3 _currentClickTarget;
         
         private void Start()
         {
-            cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
-            _controller = GetComponent<ThirdPersonCharacter>();
-            currentClickTarget = transform.position;
+            _cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
+            Assert.IsNotNull(_cameraRaycaster);
+
+            _controller = GetComponent<vThirdPersonController>();
+            _currentClickTarget = transform.position;
         }
 
         // Fixed update is called in sync with physics
         private void FixedUpdate()
         {
-            if (Input.GetMouseButton(0))
+            HandlePointAndClickInput();
+        }
+
+        private void HandlePointAndClickInput ()
+        {
+            // Directional Movement.
+            if (Input.GetButton("Fire2"))
             {
-                print("Cursor raycast hit" + cameraRaycaster.hit.collider.gameObject.name.ToString());
-                currentClickTarget = cameraRaycaster.hit.point;  // So not set in default case
+                print("Cursor raycast hit" + _cameraRaycaster.Hit.collider.gameObject.name.ToString());
+                _currentClickTarget = _cameraRaycaster.Hit.point;  // So not set in default case
             }
-            _controller.Move(currentClickTarget - transform.position, false, false);
+            Vector3 targetDirection = _currentClickTarget - transform.position;
+            _controller.input.x = targetDirection.x;
+            _controller.input.y = targetDirection.z;
         }
     }
 }
