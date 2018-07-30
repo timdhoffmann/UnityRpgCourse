@@ -3,10 +3,13 @@
 public class CameraRaycaster : MonoBehaviour
 {
     #region FIELDS
-    [SerializeField] private Layer[] _layerPriorities =
+   private Layer[] _layerPriorities =
     {
-        Layer.Walkable,
+        // The order matters! More specific goes last.
+        // TODO: Find better solution to avoid double management of layers.
+        Layer.Default,
         Layer.Enemy,
+        Layer.Walkable,
     };
     [SerializeField] private float _distanceToBackground = 100f;
     private Camera _viewCamera;
