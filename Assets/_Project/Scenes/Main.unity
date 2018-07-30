@@ -1726,7 +1726,7 @@ GameObject:
   - component: {fileID: 1128622284}
   - component: {fileID: 1128622283}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: UnwalkablePlatform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5209,7 +5209,7 @@ GameObject:
   - component: {fileID: 1325682359}
   - component: {fileID: 1325682358}
   m_Layer: 11
-  m_Name: Cube (1)
+  m_Name: UnwalkableCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5222,7 +5222,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1325682356}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.75, y: 0, z: 0}
+  m_LocalPosition: {x: 3.75, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 476296199}
@@ -5563,6 +5563,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 1256489368}
     m_Modifications:
+    - target: {fileID: 114805373749918578, guid: 775cff934c57d034382703bed1448654,
+        type: 2}
+      propertyPath: _layerPriorities.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4094915224158094, guid: 775cff934c57d034382703bed1448654, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -5593,6 +5598,21 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4094915224158094, guid: 775cff934c57d034382703bed1448654, type: 2}
       propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114805373749918578, guid: 775cff934c57d034382703bed1448654,
+        type: 2}
+      propertyPath: _layerPriorities.Array.data[0]
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114805373749918578, guid: 775cff934c57d034382703bed1448654,
+        type: 2}
+      propertyPath: _layerPriorities.Array.data[1]
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 114805373749918578, guid: 775cff934c57d034382703bed1448654,
+        type: 2}
+      propertyPath: _layerPriorities.Array.data[2]
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
