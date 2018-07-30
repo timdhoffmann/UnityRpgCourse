@@ -17,12 +17,12 @@ public class CameraRaycaster : MonoBehaviour
     public Layer LayerHit { get; private set; }
     #endregion
 
-    void Start () // TODO Awake?
+    private void Start () // TODO Awake?
     {
         _viewCamera = Camera.main;
     }
 
-    void Update()
+    private void Update()
     {
         // Look for and return priority layer hit
         foreach (var layer in _layerPriorities)
@@ -47,7 +47,7 @@ public class CameraRaycaster : MonoBehaviour
     }
 
     // Nullable return value type.
-    RaycastHit? RaycastForLayer(Layer layer)
+    private RaycastHit? RaycastForLayer(Layer layer)
     {
         int layerMask = 1 << (int)layer; // See Unity docs for mask formation
         Ray ray = _viewCamera.ScreenPointToRay(Input.mousePosition);

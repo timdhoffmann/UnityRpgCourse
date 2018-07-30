@@ -7,7 +7,7 @@ namespace Invector.CharacterController
     [RequireComponent(typeof (vThirdPersonController))]
     public class PlayerMovement : MonoBehaviour
     {
-    
+        [SerializeField] private float _targetThreshold = 0.2f;
         vThirdPersonController _controller;
         CameraRaycaster _cameraRaycaster;
         Vector3 _currentClickTarget;
@@ -32,12 +32,27 @@ namespace Invector.CharacterController
             // Directional Movement.
             if (Input.GetButton("Fire2"))
             {
-                print("Cursor raycast hit" + _cameraRaycaster.Hit.collider.gameObject.name.ToString());
-                _currentClickTarget = _cameraRaycaster.Hit.point;  // So not set in default case
+                print("Cursor raycast hit layer: " + _cameraRaycaster.LayerHit);
+
+                switch (_cameraRaycaster.LayerHit)
+                {
+                    case Layer.Walkable:
+                        // Movement.
+                        _currentClickTarget = _cameraRaycaster.Hit.point;
+                        print("Hit Walkable");
+                        break;
+                    default:
+                        Debug.LogWarning("Raycasting to unhandled layer.");
+                        break;
+                }
             }
             Vector3 targetDirection = _currentClickTarget - transform.position;
-            _controller.input.x = targetDirection.x;
-            _controller.input.y = targetDirection.z;
+            if (targetDirection.magnitude > _targetThreshold)
+            {
+                _controller.input.x = targetDirection.x;
+                _controller.input.y = targetDirection.z; 
+            }
+            
         }
     }
 }

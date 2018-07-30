@@ -110,6 +110,7 @@ MonoBehaviour:
   rightOffset: 0
   defaultDistance: 3.5
   height: 1.4
+  angle: 0
   smoothFollow: 1
   xMouseSensitivity: 3
   yMouseSensitivity: 3
