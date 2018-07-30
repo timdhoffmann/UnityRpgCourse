@@ -2406,8 +2406,8 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1851629487560984}
-  m_LocalRotation: {x: -0, y: -1, z: 0, w: -0.00000010430813}
-  m_LocalPosition: {x: -2, y: 0, z: 8}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.5, y: 0, z: -5.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4261985933213594}
@@ -2548,12 +2548,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundLayer:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 1024
   groundMinDistance: 0.2
   groundMaxDistance: 0.5
   locomotionType: 0
   lockMovement: 0
-  freeRotationSpeed: 10
+  freeRotationSpeed: 15
   strafeRotationSpeed: 10
   jumpAirControl: 1
   jumpTimer: 0.3
@@ -2561,9 +2561,9 @@ MonoBehaviour:
   jumpForward: 3
   jumpHeight: 4
   useRootMotion: 0
-  freeWalkSpeed: 2.5
-  freeRunningSpeed: 3
-  freeSprintSpeed: 4
+  freeWalkSpeed: 3
+  freeRunningSpeed: 5
+  freeSprintSpeed: 6
   strafeWalkSpeed: 2.5
   strafeRunningSpeed: 3
   strafeSprintSpeed: 4
@@ -2572,25 +2572,25 @@ MonoBehaviour:
   stepSmooth: 4
   slopeLimit: 45
   extraGravity: -10
-  isGrounded: 0
+  isGrounded: 1
   isStrafing: 0
   isSprinting: 0
   isSliding: 0
   isJumping: 0
   targetDirection: {x: 0, y: 0, z: 0}
-  freeRotation: {x: 0, y: 0, z: 0, w: 0}
+  freeRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   keepDirection: 0
-  animator: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  animator: {fileID: 95524184265922550}
+  _rigidbody: {fileID: 54596433817255390}
   maxFrictionPhysics: {fileID: 0}
   frictionPhysics: {fileID: 0}
   slippyPhysics: {fileID: 0}
-  _capsuleCollider: {fileID: 0}
+  _capsuleCollider: {fileID: 136163008178655612}
   colliderHeight: 0
   input: {x: 0, y: 0}
   speed: 0
-  direction: 0
-  verticalVelocity: 0
+  direction: -0.19023454
+  verticalVelocity: 0.99933803
   velocity: 0
 --- !u!114 &114711190903510414
 MonoBehaviour:
