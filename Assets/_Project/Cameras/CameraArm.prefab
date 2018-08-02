@@ -131,7 +131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38845173492d4e947b5418c71ef5338a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _standardCursor: {fileID: 0}
+  _standardCursor: {fileID: 2800000, guid: d463cd5b0eb954ddf93f1de1d1eed4f0, type: 3}
   _standardCursorTopLeftOffset: {x: 0, y: 0}
 --- !u!114 &114805373749918578
 MonoBehaviour:
