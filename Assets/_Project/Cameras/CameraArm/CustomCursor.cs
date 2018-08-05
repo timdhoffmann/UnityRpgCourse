@@ -10,10 +10,11 @@ public class CustomCursor : MonoBehaviour
     [SerializeField] private Texture2D _attackCursor = null;
     [SerializeField] private Vector2 _attackCursorTopLeftOffset;
     [SerializeField] private Texture2D _unresolvedCursor = null;
+    
     private CameraRaycaster _cameraRaycaster;
 
 	// Use this for initialization
-	void Start () 
+	private void Start () 
 	{
         _cameraRaycaster = GetComponent<CameraRaycaster>();
         Assert.IsNotNull(_cameraRaycaster);
@@ -23,7 +24,7 @@ public class CustomCursor : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update () 
+	private void Update () 
 	{
         switch (_cameraRaycaster.LayerHit)
         {
