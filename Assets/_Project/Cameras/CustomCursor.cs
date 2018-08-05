@@ -25,19 +25,21 @@ public class CustomCursor : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-        if (_cameraRaycaster.LayerHit == Layer.Walkable)
+        switch (_cameraRaycaster.LayerHit)
         {
-            Cursor.SetCursor(_standardCursor, _standardCursorTopLeftOffset, CursorMode.Auto);
-        } 
-        else if (_cameraRaycaster.LayerHit == Layer.Enemy)
-        {
-            Assert.IsNotNull(_attackCursor);
-            Cursor.SetCursor(_attackCursor, _attackCursorTopLeftOffset, CursorMode.Auto);
-        }
-        else
-        {
-            Assert.IsNotNull(_unresolvedCursor);
-            Cursor.SetCursor(_unresolvedCursor, _standardCursorTopLeftOffset, CursorMode.Auto);
+            case Layer.Walkable:
+                Cursor.SetCursor(_standardCursor, _standardCursorTopLeftOffset, CursorMode.Auto);
+                break;
+
+            case Layer.Enemy:
+                Assert.IsNotNull(_attackCursor);
+                Cursor.SetCursor(_attackCursor, _attackCursorTopLeftOffset, CursorMode.Auto);
+                break;
+
+            default:
+                Assert.IsNotNull(_unresolvedCursor);
+                Cursor.SetCursor(_unresolvedCursor, _standardCursorTopLeftOffset, CursorMode.Auto);
+                break;
         }
 	}
 }
