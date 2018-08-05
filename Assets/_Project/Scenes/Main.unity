@@ -523,6 +523,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114006530339400182, guid: 779fe84bbe0f53d4298dc190bce2f84d,
+        type: 2}
+      propertyPath: _gamepadControlMode
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 779fe84bbe0f53d4298dc190bce2f84d, type: 2}
   m_IsPrefabAsset: 0

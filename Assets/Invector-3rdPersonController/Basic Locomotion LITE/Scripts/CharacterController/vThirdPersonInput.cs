@@ -15,7 +15,6 @@ namespace Invector.CharacterController
         public KeyCode jumpInput = KeyCode.Space;
         public KeyCode strafeInput = KeyCode.Tab;
         public KeyCode sprintInput = KeyCode.LeftShift;
-        [SerializeField] private bool _hideCursor = false;
 
         [Header("Camera Settings")]
         public string rotateCameraXInput ="Mouse X";
@@ -50,12 +49,6 @@ namespace Invector.CharacterController
 
             tpCamera = FindObjectOfType<vThirdPersonCamera>();
             if (tpCamera) tpCamera.SetMainTarget(this.transform);
-
-            if (_hideCursor)
-            {
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked; 
-            }
         }
 
         protected virtual void LateUpdate()
