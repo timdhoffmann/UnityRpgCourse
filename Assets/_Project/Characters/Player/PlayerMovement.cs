@@ -29,7 +29,7 @@ public class PlayerMovement : MonoBehaviour
     private void HandlePointAndClickInput ()
     {
         // Directional Movement.
-        if (Input.GetButton("Fire2"))
+        if (Input.GetButtonDown("Fire1") || Input.GetButton("Fire2"))
         {
             print("Cursor raycast hit layer: " + _cameraRaycaster.LayerHit);
 
