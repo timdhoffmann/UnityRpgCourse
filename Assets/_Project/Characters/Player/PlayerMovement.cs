@@ -23,10 +23,10 @@ public class PlayerMovement : MonoBehaviour
     // Fixed update is called in sync with physics
     private void FixedUpdate()
     {
-        HandlePointAndClickInput();
+        HandleMouseAndKeyboardInput();
     }
 
-    private void HandlePointAndClickInput ()
+    private void HandleMouseAndKeyboardInput ()
     {
         // Directional Movement.
         if (Input.GetButtonDown("Fire1") || Input.GetButton("Fire2"))
