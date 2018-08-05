@@ -7,10 +7,18 @@ using UnityEngine.Assertions;
 public class InputController : MonoBehaviour
 {
     #region FIELDS
-    [SerializeField] private float _targetThreshold = 0.2f;
-    [SerializeField] private bool _gamepadControlMode = false;
+    [Header("Default Inputs")]
+    [SerializeField] private string _horizontalInput = "Horizontal";
+    [SerializeField] private string _verticallInput = "Vertical";
+    [SerializeField] private string _moveInput = "Fire1";
+    [SerializeField] private string _altMoveInput = "Fire2";
+    [SerializeField] private KeyCode _controlModeInput = KeyCode.G;
 
-    vThirdPersonController _controller;
+    [Header("Input variables")]
+    [SerializeField] private bool _gamepadControlMode = false;
+    [SerializeField] private float _targetThreshold = 0.2f;
+
+    vThirdPersonController _thirdPersonController;
     CameraRaycaster _cameraRaycaster;
     Vector3 _currentClickTarget;
     #endregion
@@ -20,7 +28,7 @@ public class InputController : MonoBehaviour
         _cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
         Assert.IsNotNull(_cameraRaycaster);
 
-        _controller = GetComponent<vThirdPersonController>();
+        _thirdPersonController = GetComponent<vThirdPersonController>();
         _currentClickTarget = transform.position;
 
         if (_gamepadControlMode)
@@ -34,7 +42,7 @@ public class InputController : MonoBehaviour
     {
         // Toggle gamepad control.
         // TODO: Allow player to re-map or access via menu.
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(_controlModeInput))
         {
             _gamepadControlMode = !_gamepadControlMode;
 
@@ -50,6 +58,13 @@ public class InputController : MonoBehaviour
             HandleMouseAndKeyboardInput();
         }
     }
+
+    // TODO: Why protected virtual? Change to private?
+    protected virtual void Update()
+        {
+            _thirdPersonController.UpdateMotor();                   // call ThirdPersonMotor methods               
+            _thirdPersonController.UpdateAnimator();                // call ThirdPersonAnimator methods		               
+        }
 
     private static void ToggleCursor()
     {
@@ -72,8 +87,9 @@ public class InputController : MonoBehaviour
 
     private void HandleMouseAndKeyboardInput ()
     {
+        // TODO: Import necessary code from vThirdPersonInput.cs for click-to-move functionality.
         // Directional Movement.
-        if (Input.GetButtonDown("Fire1") || Input.GetButton("Fire2"))
+        if (Input.GetButtonDown(_moveInput) || Input.GetButton(_altMoveInput))
         {
             print("Cursor raycast hit layer: " + _cameraRaycaster.LayerHit);
 
@@ -92,8 +108,8 @@ public class InputController : MonoBehaviour
         Vector3 targetDirection = _currentClickTarget - transform.position;
         if (targetDirection.magnitude > _targetThreshold)
         {
-            _controller.input.x = targetDirection.x;
-            _controller.input.y = targetDirection.z; 
+            _thirdPersonController.input.x = targetDirection.x;
+            _thirdPersonController.input.y = targetDirection.z; 
         }
             
     }
