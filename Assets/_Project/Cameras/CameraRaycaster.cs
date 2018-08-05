@@ -11,6 +11,7 @@ public class CameraRaycaster : MonoBehaviour
         Layer.Enemy,
         Layer.Walkable,
     };
+    
     [SerializeField] private float _distanceToBackground = 100f;
     private Camera _viewCamera;
     #endregion
