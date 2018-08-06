@@ -103,18 +103,19 @@ public class InputController : MonoBehaviour
     // TODO: Refactor out what's not needed.
     protected virtual void HandleInput ()
     {
-        if (_gamepadControlMode)
+        if (!_thirdPersonController.lockMovement)
         {
-            HandleGamepadInput();
-        }
-        else
-        {
-            if (!_thirdPersonController.lockMovement)
+            if (_gamepadControlMode)
+            {
+                HandleGamepadInput();
+            }
+            else
+            // Mouse & keyboard mode.
             {
                 HandleMouseAndKeyboardInput();
                 // Needed. Otherwise, character just runs straight.
-                CameraInput();
             }
+            CameraInput();
         }
     }
 
@@ -133,8 +134,8 @@ public class InputController : MonoBehaviour
     protected virtual void MoveCharacter ()
     {
         // Currently neeeded.
-        _thirdPersonController.input.x = Input.GetAxis(_horizontalInput);
-        _thirdPersonController.input.y = Input.GetAxis(_verticallInput);
+        _thirdPersonController.input.x = 0f;
+        _thirdPersonController.input.y = 0f;
 
         if (Input.GetButtonDown(_moveInput) || Input.GetButton(_altMoveInput))
         {
@@ -249,7 +250,8 @@ public class InputController : MonoBehaviour
     private void HandleGamepadInput()
     {
         // TODO: Implement gamepad input.
-        throw new NotImplementedException();
+        _thirdPersonController.input.x = Input.GetAxis(_horizontalInput);
+        _thirdPersonController.input.y = Input.GetAxis(_verticallInput);
     }
 
 }
