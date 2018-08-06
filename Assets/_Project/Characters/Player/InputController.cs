@@ -189,6 +189,26 @@ public class InputController : MonoBehaviour
 
     #endregion
 
+    private static void ToggleCursor()
+    {
+        Cursor.visible = !Cursor.visible;
+        if (Cursor.visible)
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+    }
+
+    private void HandleGamepadInput()
+    {
+        // TODO: Implement gamepad input.
+        _thirdPersonController.input.x = Input.GetAxis(_horizontalInput);
+        _thirdPersonController.input.y = Input.GetAxis(_verticallInput);
+    }
+
     // TODO: Refactor what's not needed.
     #region Camera Methods
 
@@ -201,7 +221,7 @@ public class InputController : MonoBehaviour
 
         _tpCamera.RotateCamera(X, Y);
 
-        // tranform Character direction from camera if not KeepDirection
+        // transform Character direction from camera if not KeepDirection
         if (!keepDirection)
             _thirdPersonController.UpdateTargetDirection(_tpCamera != null ? _tpCamera.transform : null);
         // rotate the character with the camera while strafing        
@@ -226,32 +246,11 @@ public class InputController : MonoBehaviour
 
     protected virtual void RotateWithCamera (Transform cameraTransform)
     {
-        if (_thirdPersonController.isStrafing && !_thirdPersonController.lockMovement && !_thirdPersonController.lockMovement)
+        if (_thirdPersonController.isStrafing && !_thirdPersonController.lockMovement)
         {
             _thirdPersonController.RotateWithAnotherTransform(cameraTransform);
         }
     }
 
     #endregion
-
-    private static void ToggleCursor()
-    {
-        Cursor.visible = !Cursor.visible;
-        if (Cursor.visible)
-        {
-            Cursor.lockState = CursorLockMode.None;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
-    }
-
-    private void HandleGamepadInput()
-    {
-        // TODO: Implement gamepad input.
-        _thirdPersonController.input.x = Input.GetAxis(_horizontalInput);
-        _thirdPersonController.input.y = Input.GetAxis(_verticallInput);
-    }
-
 }
