@@ -11,7 +11,6 @@ public class InputController : MonoBehaviour
     [SerializeField] private string _horizontalInput = "Horizontal";
     [SerializeField] private string _verticallInput = "Vertical";
     [SerializeField] private string _moveInput = "Fire1";
-    [SerializeField] private string _altMoveInput = "Fire2";
     [SerializeField] private KeyCode _sprintInput = KeyCode.LeftShift;
     [SerializeField] private KeyCode _jumpInput = KeyCode.Space;
     [SerializeField] private KeyCode _controlModeInput = KeyCode.G;
@@ -80,6 +79,9 @@ public class InputController : MonoBehaviour
             _gamepadControlMode = !_gamepadControlMode;
 
             ToggleCursor();
+
+            // Prevents movement on switching modes.
+            //_currentClickTarget = transform.position;
         }
         //    cc.AirControl();
         //    CameraInput();
@@ -90,7 +92,7 @@ public class InputController : MonoBehaviour
     protected virtual void Update ()
     {
         _thirdPersonController.UpdateMotor();                   // call ThirdPersonMotor methods               
-        _thirdPersonController.UpdateAnimator();                // call ThirdPersonAnimator methods		               
+        _thirdPersonController.UpdateAnimator();                // call ThirdPersonAnimator methods		     
     }
 
     protected virtual void LateUpdate ()
@@ -137,7 +139,7 @@ public class InputController : MonoBehaviour
         _thirdPersonController.input.x = 0f;
         _thirdPersonController.input.y = 0f;
 
-        if (Input.GetButtonDown(_moveInput) || Input.GetButton(_altMoveInput))
+        if (Input.GetButtonDown(_moveInput))
         {
             print("Cursor raycast hit layer: " + _cameraRaycaster.LayerHit);
 
