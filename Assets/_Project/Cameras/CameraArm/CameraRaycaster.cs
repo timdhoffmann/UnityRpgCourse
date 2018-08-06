@@ -18,7 +18,7 @@ public class CameraRaycaster : MonoBehaviour
 
     #region PROPERTIES
     public RaycastHit Hit { get; private set; }
-    public Layer LayerHit { get; private set; }
+    public Layer CurrentLayerHit { get; private set; }
     #endregion
 
     private void Start ()
@@ -35,7 +35,7 @@ public class CameraRaycaster : MonoBehaviour
             if (hit.HasValue)
             {
                 Hit = hit.Value;
-                LayerHit = layer;
+                CurrentLayerHit = layer;
                 return;
             }
         }
@@ -47,7 +47,7 @@ public class CameraRaycaster : MonoBehaviour
         };
         Hit = backgroundHit;
 
-        LayerHit = Layer.RaycastEndStop;
+        CurrentLayerHit = Layer.RaycastEndStop;
     }
 
     // Nullable return value type.

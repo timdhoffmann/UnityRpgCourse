@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
+[RequireComponent(typeof(CameraRaycaster))]
 public class CustomCursor : MonoBehaviour 
 {
     [SerializeField] private Texture2D _standardCursor = null;
@@ -26,7 +27,7 @@ public class CustomCursor : MonoBehaviour
 	// Update is called once per frame
 	private void Update () 
 	{
-        switch (_cameraRaycaster.LayerHit)
+        switch (_cameraRaycaster.CurrentLayerHit)
         {
             case Layer.Walkable:
                 Cursor.SetCursor(_standardCursor, _standardCursorTopLeftOffset, CursorMode.Auto);

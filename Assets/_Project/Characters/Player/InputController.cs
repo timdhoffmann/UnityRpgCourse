@@ -20,24 +20,23 @@ public class InputController : MonoBehaviour
     [SerializeField] private float _targetThreshold = 0.2f;
 
     // vThirdPersonInput-specific stuff.
-    public bool keepDirection;                          // keep the current direction in case you change the cameraState
+    public bool _keepDirection;                          // keep the current direction in case you change the cameraState
     [Header("Camera Settings")]
-    public string rotateCameraXInput = "Mouse X";
-    public string rotateCameraYInput = "Mouse Y";
+    public string _rotateCameraXInput = "Mouse X";
+    public string _rotateCameraYInput = "Mouse Y";
 
-    #region COMPONENTS
+    // Components.
     private vThirdPersonController _thirdPersonController;
     private CameraRaycaster _cameraRaycaster;
     private Vector3 _currentClickTarget;
     // TODO: [Input] Refactor away.
     protected vThirdPersonCamera _tpCamera;                // acess camera info    
     #endregion
-    #endregion
 
     private void Start()
     {
         InitVariables();
-        InitCharacter();
+        InitThirdPersonCharacter();
 
         if (_gamepadControlMode)
         {
@@ -59,7 +58,7 @@ public class InputController : MonoBehaviour
         _currentClickTarget = transform.position;
     }
 
-    protected virtual void InitCharacter ()
+    protected virtual void InitThirdPersonCharacter ()
     {
         _thirdPersonController.Init();
 
@@ -137,9 +136,9 @@ public class InputController : MonoBehaviour
 
         if (Input.GetButtonDown(_moveInput))
         {
-            print("Cursor raycast hit layer: " + _cameraRaycaster.LayerHit);
+            print("Cursor raycast hit layer: " + _cameraRaycaster.CurrentLayerHit);
 
-            switch (_cameraRaycaster.LayerHit)
+            switch (_cameraRaycaster.CurrentLayerHit)
             {
                 case Layer.Walkable:
                     // Movement.
@@ -214,13 +213,13 @@ public class InputController : MonoBehaviour
     {
         Assert.IsNotNull(_tpCamera);
 
-        var Y = Input.GetAxis(rotateCameraYInput);
-        var X = Input.GetAxis(rotateCameraXInput);
+        var Y = Input.GetAxis(_rotateCameraYInput);
+        var X = Input.GetAxis(_rotateCameraXInput);
 
         _tpCamera.RotateCamera(X, Y);
 
         // transform Character direction from camera if not KeepDirection
-        if (!keepDirection)
+        if (!_keepDirection)
             _thirdPersonController.UpdateTargetDirection(_tpCamera != null ? _tpCamera.transform : null);
         // rotate the character with the camera while strafing        
         RotateWithCamera(_tpCamera != null ? _tpCamera.transform : null);
