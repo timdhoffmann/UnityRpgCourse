@@ -2549,10 +2549,9 @@ MonoBehaviour:
   _horizontalInput: Horizontal
   _verticallInput: Vertical
   _moveInput: Fire1
-  _altMoveInput: Fire2
-  _sprintInput: 304
-  _jumpInput: 32
-  _controlModeInput: 103
+  _sprintInput: Sprint
+  _jumpInput: Jump
+  _controlModeInput: ControlMode
   _gamepadControlMode: 0
   _targetThreshold: 0.2
   keepDirection: 0

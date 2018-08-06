@@ -11,9 +11,9 @@ public class InputController : MonoBehaviour
     [SerializeField] private string _horizontalInput = "Horizontal";
     [SerializeField] private string _verticallInput = "Vertical";
     [SerializeField] private string _moveInput = "Fire1";
-    [SerializeField] private KeyCode _sprintInput = KeyCode.LeftShift;
-    [SerializeField] private KeyCode _jumpInput = KeyCode.Space;
-    [SerializeField] private KeyCode _controlModeInput = KeyCode.G;
+    [SerializeField] private string _sprintInput = "Sprint";
+    [SerializeField] private string _jumpInput = "Jump";
+    [SerializeField] private string _controlModeInput = "ControlMode";
 
     [Header("Input variables")]
     [SerializeField] private bool _gamepadControlMode = false;
@@ -29,7 +29,7 @@ public class InputController : MonoBehaviour
     private vThirdPersonController _thirdPersonController;
     private CameraRaycaster _cameraRaycaster;
     private Vector3 _currentClickTarget;
-    // TODO: Refactor away.
+    // TODO: [Input] Refactor away.
     protected vThirdPersonCamera _tpCamera;                // acess camera info    
     #endregion
     #endregion
@@ -73,23 +73,21 @@ public class InputController : MonoBehaviour
     private void FixedUpdate()
     {
         // Toggles gamepad control mode.
-        // TODO: Allow player to re-map or access via menu.
-        if (Input.GetKeyDown(_controlModeInput))
+        if (Input.GetButtonDown(_controlModeInput))
         {
             _gamepadControlMode = !_gamepadControlMode;
 
+            // TODO: [Input] Fix cursor visibility and Game mode going out of sync.
             ToggleCursor();
 
-            // Prevents movement on switching modes.
-            //_currentClickTarget = transform.position;
+            // Clear click target.
+            _currentClickTarget = transform.position;
         }
         //    cc.AirControl();
         //    CameraInput();
     }
 
-
-    // TODO: Why protected virtual? Change to private?
-    protected virtual void Update ()
+    private void Update ()
     {
         _thirdPersonController.UpdateMotor();                   // call ThirdPersonMotor methods               
         _thirdPersonController.UpdateAnimator();                // call ThirdPersonAnimator methods		     
@@ -102,7 +100,6 @@ public class InputController : MonoBehaviour
         //UpdateCameraStates();
     }
 
-    // TODO: Refactor out what's not needed.
     protected virtual void HandleInput ()
     {
         if (!_thirdPersonController.lockMovement)
@@ -115,7 +112,6 @@ public class InputController : MonoBehaviour
             // Mouse & keyboard mode.
             {
                 HandleMouseAndKeyboardInput();
-                // Needed. Otherwise, character just runs straight.
             }
             CameraInput();
         }
@@ -130,7 +126,7 @@ public class InputController : MonoBehaviour
         //JumpInput();
     }
 
-    // TODO: Refactor what's not needed.
+    // TODO: [Input] Refactor what's not needed.
     #region Basic Locomotion Inputs      
 
     protected virtual void MoveCharacter ()
@@ -165,7 +161,7 @@ public class InputController : MonoBehaviour
 
     protected virtual void SprintInput ()
     {
-        if (Input.GetKeyDown(_sprintInput))
+        if (Input.GetButtonDown(_sprintInput))
             _thirdPersonController.Sprint(true);
         else if (Input.GetKeyUp(_sprintInput))
             _thirdPersonController.Sprint(false);
@@ -173,7 +169,7 @@ public class InputController : MonoBehaviour
 
     protected virtual void JumpInput ()
     {
-        if (Input.GetKeyDown(_jumpInput))
+        if (Input.GetButtonDown(_jumpInput))
             _thirdPersonController.Jump();
     }
 
@@ -206,12 +202,12 @@ public class InputController : MonoBehaviour
 
     private void HandleGamepadInput()
     {
-        // TODO: Implement gamepad input.
+        // TODO: [Input] Fix axis mapping to camera.
         _thirdPersonController.input.x = Input.GetAxis(_horizontalInput);
         _thirdPersonController.input.y = Input.GetAxis(_verticallInput);
     }
 
-    // TODO: Refactor what's not needed.
+    // TODO: [Input] Refactor what's not needed.
     #region Camera Methods
 
     protected virtual void CameraInput ()

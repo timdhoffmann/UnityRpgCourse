@@ -4884,7 +4884,7 @@ GameObject:
   - component: {fileID: 374102324}
   - component: {fileID: 374102323}
   - component: {fileID: 374102322}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Collider (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7007,14 +7007,8 @@ MonoBehaviour:
     areaError: 15
   dontDestroyMeshOnDelete: 0
   m_selectedFaces: 
-  m_SelectedEdges:
-  - x: 13
-    y: 15
-  - x: 14
-    y: 12
-  - x: 163
-    y: 161
-  m_selectedTriangles: 0d0000000f0000000e0000000c000000a3000000a1000000
+  m_SelectedEdges: []
+  m_selectedTriangles: 
 --- !u!23 &374102324
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -18156,7 +18150,7 @@ GameObject:
   - component: {fileID: 827059355}
   - component: {fileID: 827059354}
   - component: {fileID: 827059353}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21603,7 +21597,7 @@ GameObject:
   - component: {fileID: 998364911}
   - component: {fileID: 998364910}
   - component: {fileID: 998364909}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Collider (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
