@@ -81,7 +81,6 @@ public class InputController : MonoBehaviour
 
             ToggleCursor();
         }
-
         //    cc.AirControl();
         //    CameraInput();
     }
@@ -97,10 +96,8 @@ public class InputController : MonoBehaviour
     protected virtual void LateUpdate ()
     {
         Assert.IsNotNull(_thirdPersonController);		    
-        HandleInput();                      // update input methods
-        UpdateCameraStates();               // update camera states
-
-
+        HandleInput();
+        //UpdateCameraStates();
     }
 
     // TODO: Refactor out what's not needed.
@@ -114,10 +111,8 @@ public class InputController : MonoBehaviour
         {
             if (!_thirdPersonController.lockMovement)
             {
-                MoveCharacter();
-                //SprintInput();
-                //JumpInput();
                 HandleMouseAndKeyboardInput();
+                // Needed. Otherwise, character just runs straight.
                 CameraInput();
             }
         }
@@ -125,10 +120,22 @@ public class InputController : MonoBehaviour
 
     private void HandleMouseAndKeyboardInput ()
     {
-        // TODO: Import necessary code from vThirdPersonInput.cs for click-to-move functionality.
-        ExitGameInput();
+        HandleExitGameInput();
 
-        // Directional Movement.
+        MoveCharacter();
+        //SprintInput();
+        //JumpInput();
+    }
+
+    // TODO: Refactor what's not needed.
+    #region Basic Locomotion Inputs      
+
+    protected virtual void MoveCharacter ()
+    {
+        // Currently neeeded.
+        _thirdPersonController.input.x = Input.GetAxis(_horizontalInput);
+        _thirdPersonController.input.y = Input.GetAxis(_verticallInput);
+
         if (Input.GetButtonDown(_moveInput) || Input.GetButton(_altMoveInput))
         {
             print("Cursor raycast hit layer: " + _cameraRaycaster.LayerHit);
@@ -153,15 +160,6 @@ public class InputController : MonoBehaviour
         }
     }
 
-    // TODO: Refactor what's not needed.
-    #region Basic Locomotion Inputs      
-
-    protected virtual void MoveCharacter ()
-    {
-        _thirdPersonController.input.x = Input.GetAxis(_horizontalInput);
-        _thirdPersonController.input.y = Input.GetAxis(_verticallInput);
-    }
-
     protected virtual void SprintInput ()
     {
         if (Input.GetKeyDown(_sprintInput))
@@ -176,7 +174,7 @@ public class InputController : MonoBehaviour
             _thirdPersonController.Jump();
     }
 
-    protected virtual void ExitGameInput ()
+    protected virtual void HandleExitGameInput ()
     {
         // just a example to quit the application 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -195,8 +193,8 @@ public class InputController : MonoBehaviour
 
     protected virtual void CameraInput ()
     {
-        if (_tpCamera == null)
-            return;
+        Assert.IsNotNull(_tpCamera);
+
         var Y = Input.GetAxis(rotateCameraYInput);
         var X = Input.GetAxis(rotateCameraXInput);
 
