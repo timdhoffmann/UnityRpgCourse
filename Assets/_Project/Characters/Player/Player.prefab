@@ -2547,8 +2547,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9cfacb8268ed1c448bc3d9b0bd03acd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _horizontalInput: Horizontal
-  _verticallInput: Vertical
   _moveInput: Fire1
   _altMoveInput: Fire2
   _controlModeInput: 103
