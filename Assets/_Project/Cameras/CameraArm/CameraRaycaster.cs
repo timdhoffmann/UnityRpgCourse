@@ -68,6 +68,7 @@ public class CameraRaycaster : MonoBehaviour
             {
                 Hit = hit.Value;
 
+                // Checks if the layer has changed.
                 if (CurrentLayerHit != layer)
                 {
                     CurrentLayerHit = layer;

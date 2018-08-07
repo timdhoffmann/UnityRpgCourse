@@ -38,7 +38,12 @@ public class CustomCursor : MonoBehaviour
         Cursor.SetCursor(_standardCursor, _standardCursorTopLeftOffset, CursorMode.Auto);
 	}
 
-    #region EVENT HANDLING METHODS
+    #region EVENT SUBSCRIBER METHODS
+    /// <summary>
+    /// Called when raycasting detects a change in the layer hit.
+    /// </summary>
+    /// <param name="sender">The object that broadcasted the event.</param>
+    /// <param name="e">Additional information about the event.</param>
     private void OnLayerChanged (object sender, LayerChangedEventArgs e)
     {
         switch (e.CurrentLayer)
