@@ -6,7 +6,12 @@
 /// </summary>
 public class LayerChangedEventArgs : System.EventArgs
 {
+    public Layer CurrentLayer { get; }
 
+    public LayerChangedEventArgs (Layer currentLayer)
+    {
+        CurrentLayer = currentLayer;
+    }
 }
 #endregion
 
@@ -22,10 +27,10 @@ public class CameraRaycaster : MonoBehaviour
     /// <summary>
     /// Method used to raise the event when the layer changed.
     /// </summary>
-    protected virtual void OnLayerChanged ()
+    protected virtual void OnLayerChanged (Layer currentLayer)
     {
         // Raises event, if subscribers are present.
-        LayerChanged?.Invoke(this, new LayerChangedEventArgs() { });
+        LayerChanged?.Invoke(this, new LayerChangedEventArgs(currentLayer));
     }
     #endregion
 
@@ -51,9 +56,6 @@ public class CameraRaycaster : MonoBehaviour
     private void Start ()
     {
         _viewCamera = Camera.main;
-
-        // TODO: Call event rising method in the right place.
-        OnLayerChanged();
     }
 
     private void Update()
@@ -65,7 +67,14 @@ public class CameraRaycaster : MonoBehaviour
             if (hit.HasValue)
             {
                 Hit = hit.Value;
-                CurrentLayerHit = layer;
+
+                if (CurrentLayerHit != layer)
+                {
+                    CurrentLayerHit = layer;
+
+                    // Calls method to rise event.
+                    OnLayerChanged(layer);
+                }
                 return;
             }
         }

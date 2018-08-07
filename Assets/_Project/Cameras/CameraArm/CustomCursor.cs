@@ -25,20 +25,11 @@ public class CustomCursor : MonoBehaviour
         _cameraRaycaster.LayerChanged += OnLayerChanged;
     }
 
-
     private void OnDisable ()
     {
         // Event un-subscribing.
         _cameraRaycaster.LayerChanged -= OnLayerChanged;
     }
-
-    #region EVENT HANDLING
-    private void OnLayerChanged (object sender, LayerChangedEventArgs e)
-    {
-        // TODO: Implement functionality.
-        print(this + " received event from " + sender);
-    } 
-    #endregion
 
     // Use this for initialization
     private void Start () 
@@ -46,11 +37,11 @@ public class CustomCursor : MonoBehaviour
         Assert.IsNotNull(_standardCursor);
         Cursor.SetCursor(_standardCursor, _standardCursorTopLeftOffset, CursorMode.Auto);
 	}
-	
-	// Update is called once per frame
-	private void Update () 
-	{
-        switch (_cameraRaycaster.CurrentLayerHit)
+
+    #region EVENT HANDLING METHODS
+    private void OnLayerChanged (object sender, LayerChangedEventArgs e)
+    {
+        switch (e.CurrentLayer)
         {
             case Layer.Walkable:
                 Cursor.SetCursor(_standardCursor, _standardCursorTopLeftOffset, CursorMode.Auto);
@@ -66,5 +57,6 @@ public class CustomCursor : MonoBehaviour
                 Cursor.SetCursor(_unresolvedCursor, _standardCursorTopLeftOffset, CursorMode.Auto);
                 break;
         }
-	}
+    } 
+    #endregion
 }
