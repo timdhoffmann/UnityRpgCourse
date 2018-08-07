@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -7,19 +8,41 @@ using UnityEngine.Assertions;
 public class CustomCursor : MonoBehaviour 
 {
     [SerializeField] private Texture2D _standardCursor = null;
-    [SerializeField] private Vector2 _standardCursorTopLeftOffset;
+    [SerializeField] private Vector2 _standardCursorTopLeftOffset = new Vector2(0f, 0f);
     [SerializeField] private Texture2D _attackCursor = null;
-    [SerializeField] private Vector2 _attackCursorTopLeftOffset;
+    [SerializeField] private Vector2 _attackCursorTopLeftOffset = new Vector2(0f, 0f);
     [SerializeField] private Texture2D _unresolvedCursor = null;
     
     private CameraRaycaster _cameraRaycaster;
 
-	// Use this for initialization
-	private void Start () 
-	{
+    private void OnEnable ()
+    {
+        // Variable initializations.
         _cameraRaycaster = GetComponent<CameraRaycaster>();
         Assert.IsNotNull(_cameraRaycaster);
 
+        // Event subscribing.
+        _cameraRaycaster.LayerChanged += OnLayerChanged;
+    }
+
+
+    private void OnDisable ()
+    {
+        // Event un-subscribing.
+        _cameraRaycaster.LayerChanged -= OnLayerChanged;
+    }
+
+    #region EVENT HANDLING
+    private void OnLayerChanged (object sender, LayerChangedEventArgs e)
+    {
+        // TODO: Implement functionality.
+        print(this + " received event from " + sender);
+    } 
+    #endregion
+
+    // Use this for initialization
+    private void Start () 
+	{
         Assert.IsNotNull(_standardCursor);
         Cursor.SetCursor(_standardCursor, _standardCursorTopLeftOffset, CursorMode.Auto);
 	}
