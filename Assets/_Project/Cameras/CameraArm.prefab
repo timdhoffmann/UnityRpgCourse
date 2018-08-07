@@ -131,6 +131,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38845173492d4e947b5418c71ef5338a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _standardCursor: {fileID: 2800000, guid: 4ec9d9b9b141449cc9e9e95898b67e35, type: 3}
+  _standardCursorTopLeftOffset: {x: 4, y: 2}
+  _attackCursor: {fileID: 2800000, guid: 51bcf9ff8064c4b389f80e87b5cff91a, type: 3}
+  _attackCursorTopLeftOffset: {x: 0, y: 0}
+  _unresolvedCursor: {fileID: 2800000, guid: 0517131f16d23430ebb18881cf242537, type: 3}
 --- !u!114 &114805373749918578
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -142,7 +147,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9eb1c6cc5860c8b4bbfcf6994a8d6ebe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _layerPriorities: 0a0000000b000000
   _distanceToBackground: 100
 --- !u!114 &114882841033934458
 MonoBehaviour:

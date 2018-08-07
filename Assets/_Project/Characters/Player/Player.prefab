@@ -1137,8 +1137,7 @@ GameObject:
   - component: {fileID: 54596433817255390}
   - component: {fileID: 136163008178655612}
   - component: {fileID: 114182220230998702}
-  - component: {fileID: 114711190903510414}
-  - component: {fileID: 114223807578917180}
+  - component: {fileID: 114006530339400182}
   m_Layer: 9
   m_Name: Player
   m_TagString: Player
@@ -2536,6 +2535,28 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114006530339400182
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1851629487560984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9cfacb8268ed1c448bc3d9b0bd03acd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _horizontalInput: Horizontal
+  _verticallInput: Vertical
+  _moveInput: Fire1
+  _sprintInput: Sprint
+  _jumpInput: Jump
+  _controlModeInput: ControlMode
+  _gamepadControlMode: 0
+  _targetThreshold: 0.2
+  keepDirection: 0
+  rotateCameraXInput: Mouse X
+  rotateCameraYInput: Mouse Y
 --- !u!114 &114182220230998702
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2593,42 +2614,6 @@ MonoBehaviour:
   direction: -0.19023454
   verticalVelocity: 0.99933803
   velocity: 0
---- !u!114 &114223807578917180
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1851629487560984}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9cfacb8268ed1c448bc3d9b0bd03acd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _targetThreshold: 0.2
---- !u!114 &114711190903510414
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1851629487560984}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5deb9ff5611cb9d4596d397ac57ee8c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  horizontalInput: Horizontal
-  verticallInput: Vertical
-  jumpInput: 32
-  strafeInput: 9
-  sprintInput: 304
-  _hideCursor: 0
-  rotateCameraXInput: Mouse X
-  rotateCameraYInput: Mouse Y
-  customCameraState: 
-  customlookAtPoint: 
-  changeCameraState: 0
-  smoothCameraState: 0
-  keepDirection: 0
 --- !u!136 &136163008178655612
 CapsuleCollider:
   m_ObjectHideFlags: 1
