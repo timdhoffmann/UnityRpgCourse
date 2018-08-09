@@ -17,7 +17,10 @@ public class InputController : MonoBehaviour
 
     [Header("Input variables")]
     [SerializeField] private bool _gamepadControlMode = false;
-    [SerializeField] private float _targetStopRadius = 0.2f;
+    [SerializeField] private readonly float _moveStopRadius = 0.2f;
+    [SerializeField] private readonly float _meleeAttackStopRadius = 1f;
+
+    private float _currentStopRadius = 0f;
 
     // vThirdPersonInput-specific stuff.
     public bool _keepDirection;                          // keep the current direction in case you change the cameraState
@@ -28,7 +31,7 @@ public class InputController : MonoBehaviour
     // Components.
     private vThirdPersonController _thirdPersonController;
     private CameraRaycaster _cameraRaycaster;
-    private Vector3 _currentClickTarget;
+    private Vector3 _currentClickPoint;
     // TODO: [Input] Refactor away.
     protected vThirdPersonCamera _tpCamera;                // acess camera info    
     #endregion
@@ -55,7 +58,7 @@ public class InputController : MonoBehaviour
         _tpCamera = FindObjectOfType<vThirdPersonCamera>();
         Assert.IsNotNull(_tpCamera);
 
-        _currentClickTarget = transform.position;
+        _currentClickPoint = transform.position;
     }
 
     protected virtual void InitThirdPersonCharacter ()
@@ -80,7 +83,7 @@ public class InputController : MonoBehaviour
             ToggleCursor();
 
             // Clear click target.
-            _currentClickTarget = transform.position;
+            _currentClickPoint = transform.position;
         }
         //    cc.AirControl();
         //    CameraInput();
@@ -150,7 +153,8 @@ public class InputController : MonoBehaviour
 
     // TODO: [Input] Refactor what's not needed.
 
-    #region Basic Locomotion Inputs      
+    #region BASIC LOCOMOTION INPUTS    
+        
     protected virtual void MoveCharacter ()
     {
         // Currently neeeded.
@@ -163,8 +167,15 @@ public class InputController : MonoBehaviour
             {
                 case Layer.Walkable:
                     // Movement.
-                    _currentClickTarget = _cameraRaycaster.Hit.point;
-                    print("Hit Walkable");
+                    Debug.Log("Clicked Walkable");
+                    _currentClickPoint = _cameraRaycaster.Hit.point;
+                    _currentStopRadius = _moveStopRadius;
+                    break;
+                case Layer.Enemy:
+                    // Attacking.
+                    Debug.Log("Clicked enemy.");
+                    _currentClickPoint = _cameraRaycaster.Hit.point;
+                    _currentStopRadius = _meleeAttackStopRadius;
                     break;
                 default:
                     Debug.LogWarning("Raycasting to unhandled layer: " + _cameraRaycaster.CurrentLayerHit);
@@ -172,12 +183,13 @@ public class InputController : MonoBehaviour
             }
         }
 
-        // Walk to destination.
-        Vector3 targetDirection = _currentClickTarget - transform.position;
-        if (targetDirection.magnitude >= _targetStopRadius)
+        Vector3 currentMoveDestination = _currentClickPoint - transform.position;
+
+        if (currentMoveDestination.magnitude >= _currentStopRadius)
         {
-            _thirdPersonController.input.x = targetDirection.x;
-            _thirdPersonController.input.y = targetDirection.z;
+            // Walk to destination.
+            _thirdPersonController.input.x = currentMoveDestination.x;
+            _thirdPersonController.input.y = currentMoveDestination.z;
         }
     }
 
@@ -257,11 +269,16 @@ public class InputController : MonoBehaviour
     {
         // Movement Gizmos.
         Gizmos.color = Color.black;
-        Gizmos.DrawLine(transform.position, _currentClickTarget);
+        Gizmos.DrawLine(transform.position, _currentClickPoint);
 
-        if ((_currentClickTarget - transform.position).magnitude > 0f)
+        if (_currentStopRadius == _meleeAttackStopRadius)
         {
-            Gizmos.DrawWireSphere(_currentClickTarget, _targetStopRadius); 
+            Gizmos.color = Color.red;
+        }
+
+        if ((_currentClickPoint - transform.position).magnitude > 0f)
+        {
+            Gizmos.DrawWireSphere(transform.position, _currentStopRadius); 
         }
     }
 }
