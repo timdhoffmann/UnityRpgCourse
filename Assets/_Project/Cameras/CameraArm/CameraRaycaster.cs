@@ -72,6 +72,7 @@ public class CameraRaycaster : MonoBehaviour
                 if (CurrentLayerHit != layer)
                 {
                     CurrentLayerHit = layer;
+                    Debug.Log("CurrentLayerHit changed.");
 
                     // Calls method to rise event.
                     OnLayerChanged(layer);
