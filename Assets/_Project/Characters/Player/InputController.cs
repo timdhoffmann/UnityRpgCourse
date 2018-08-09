@@ -10,14 +10,14 @@ public class InputController : MonoBehaviour
     [Header("Default input assignments")]
     [SerializeField] private string _horizontalInput = "Horizontal";
     [SerializeField] private string _verticallInput = "Vertical";
-    [SerializeField] private string _moveInput = "Fire1";
+    [SerializeField] private string _clickToMoveInput = "Fire1";
     [SerializeField] private string _sprintInput = "Sprint";
     [SerializeField] private string _jumpInput = "Jump";
     [SerializeField] private string _controlModeInput = "ControlMode";
 
     [Header("Input variables")]
     [SerializeField] private bool _gamepadControlMode = false;
-    [SerializeField] private float _targetThreshold = 0.2f;
+    [SerializeField] private float _targetStopRadius = 0.2f;
 
     // vThirdPersonInput-specific stuff.
     public bool _keepDirection;                          // keep the current direction in case you change the cameraState
@@ -125,19 +125,40 @@ public class InputController : MonoBehaviour
         //JumpInput();
     }
 
-    // TODO: [Input] Refactor what's not needed.
-    #region Basic Locomotion Inputs      
+    #region GAMEPAD INPUT
 
+    private void HandleGamepadInput ()
+    {
+        // TODO: [Input] Fix axis mapping to camera.
+        _thirdPersonController.input.x = Input.GetAxis(_horizontalInput);
+        _thirdPersonController.input.y = Input.GetAxis(_verticallInput);
+    }
+
+    private static void ToggleCursor ()
+    {
+        Cursor.visible = !Cursor.visible;
+        if (Cursor.visible)
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+    }
+    #endregion
+
+    // TODO: [Input] Refactor what's not needed.
+
+    #region Basic Locomotion Inputs      
     protected virtual void MoveCharacter ()
     {
         // Currently neeeded.
         _thirdPersonController.input.x = 0f;
         _thirdPersonController.input.y = 0f;
 
-        if (Input.GetButtonDown(_moveInput))
+        if (Input.GetButtonDown(_clickToMoveInput))
         {
-            print("Cursor raycast hit layer: " + _cameraRaycaster.CurrentLayerHit);
-
             switch (_cameraRaycaster.CurrentLayerHit)
             {
                 case Layer.Walkable:
@@ -146,12 +167,14 @@ public class InputController : MonoBehaviour
                     print("Hit Walkable");
                     break;
                 default:
-                    Debug.LogWarning("Raycasting to unhandled layer.");
+                    Debug.LogWarning("Raycasting to unhandled layer: " + _cameraRaycaster.CurrentLayerHit);
                     break;
             }
         }
+
+        // Walk to destination.
         Vector3 targetDirection = _currentClickTarget - transform.position;
-        if (targetDirection.magnitude > _targetThreshold)
+        if (targetDirection.magnitude >= _targetStopRadius)
         {
             _thirdPersonController.input.x = targetDirection.x;
             _thirdPersonController.input.y = targetDirection.z;
@@ -185,28 +208,7 @@ public class InputController : MonoBehaviour
     }
 
     #endregion
-
-    private static void ToggleCursor()
-    {
-        Cursor.visible = !Cursor.visible;
-        if (Cursor.visible)
-        {
-            Cursor.lockState = CursorLockMode.None;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
-    }
-
-    private void HandleGamepadInput()
-    {
-        // TODO: [Input] Fix axis mapping to camera.
-        _thirdPersonController.input.x = Input.GetAxis(_horizontalInput);
-        _thirdPersonController.input.y = Input.GetAxis(_verticallInput);
-    }
-
-    // TODO: [Input] Refactor what's not needed.
+        
     #region Camera Methods
 
     protected virtual void CameraInput ()
@@ -250,4 +252,16 @@ public class InputController : MonoBehaviour
     }
 
     #endregion
+
+    private void OnDrawGizmos ()
+    {
+        // Movement Gizmos.
+        Gizmos.color = Color.black;
+        Gizmos.DrawLine(transform.position, _currentClickTarget);
+
+        if ((_currentClickTarget - transform.position).magnitude > 0f)
+        {
+            Gizmos.DrawWireSphere(_currentClickTarget, _targetStopRadius); 
+        }
+    }
 }

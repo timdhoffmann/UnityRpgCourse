@@ -158,7 +158,6 @@ GameObject:
   - component: {fileID: 54251575229798572}
   - component: {fileID: 136330598910432070}
   - component: {fileID: 114888888805046942}
-  - component: {fileID: 114973345570186126}
   m_Layer: 11
   m_Name: Humanoid
   m_TagString: Untagged
@@ -2592,28 +2591,6 @@ MonoBehaviour:
   direction: -0.19023454
   verticalVelocity: 0.99933803
   velocity: 0
---- !u!114 &114973345570186126
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1088940040052932}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9cfacb8268ed1c448bc3d9b0bd03acd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _horizontalInput: Horizontal
-  _verticallInput: Vertical
-  _clickToMoveInput: Fire1
-  _sprintInput: Sprint
-  _jumpInput: Jump
-  _controlModeInput: ControlMode
-  _gamepadControlMode: 0
-  _targetStopRadius: 0.2
-  _keepDirection: 0
-  _rotateCameraXInput: Mouse X
-  _rotateCameraYInput: Mouse Y
 --- !u!136 &136330598910432070
 CapsuleCollider:
   m_ObjectHideFlags: 1
