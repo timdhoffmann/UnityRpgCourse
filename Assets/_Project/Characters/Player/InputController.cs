@@ -10,14 +10,17 @@ public class InputController : MonoBehaviour
     [Header("Default input assignments")]
     [SerializeField] private string _horizontalInput = "Horizontal";
     [SerializeField] private string _verticallInput = "Vertical";
-    [SerializeField] private string _moveInput = "Fire1";
+    [SerializeField] private string _clickToMoveInput = "Fire1";
     [SerializeField] private string _sprintInput = "Sprint";
     [SerializeField] private string _jumpInput = "Jump";
     [SerializeField] private string _controlModeInput = "ControlMode";
 
     [Header("Input variables")]
     [SerializeField] private bool _gamepadControlMode = false;
-    [SerializeField] private float _targetThreshold = 0.2f;
+    [SerializeField] private readonly float _moveStopRadius = 0.2f;
+    [SerializeField] private readonly float _meleeAttackStopRadius = 1f;
+
+    private float _currentStopRadius = 0f;
 
     // vThirdPersonInput-specific stuff.
     public bool _keepDirection;                          // keep the current direction in case you change the cameraState
@@ -28,7 +31,7 @@ public class InputController : MonoBehaviour
     // Components.
     private vThirdPersonController _thirdPersonController;
     private CameraRaycaster _cameraRaycaster;
-    private Vector3 _currentClickTarget;
+    private Vector3 _currentClickPoint;
     // TODO: [Input] Refactor away.
     protected vThirdPersonCamera _tpCamera;                // acess camera info    
     #endregion
@@ -55,7 +58,7 @@ public class InputController : MonoBehaviour
         _tpCamera = FindObjectOfType<vThirdPersonCamera>();
         Assert.IsNotNull(_tpCamera);
 
-        _currentClickTarget = transform.position;
+        _currentClickPoint = transform.position;
     }
 
     protected virtual void InitThirdPersonCharacter ()
@@ -80,7 +83,7 @@ public class InputController : MonoBehaviour
             ToggleCursor();
 
             // Clear click target.
-            _currentClickTarget = transform.position;
+            _currentClickPoint = transform.position;
         }
         //    cc.AirControl();
         //    CameraInput();
@@ -125,36 +128,68 @@ public class InputController : MonoBehaviour
         //JumpInput();
     }
 
-    // TODO: [Input] Refactor what's not needed.
-    #region Basic Locomotion Inputs      
+    #region GAMEPAD INPUT
 
+    private void HandleGamepadInput ()
+    {
+        // TODO: [Input] Fix axis mapping to camera.
+        _thirdPersonController.input.x = Input.GetAxis(_horizontalInput);
+        _thirdPersonController.input.y = Input.GetAxis(_verticallInput);
+    }
+
+    private static void ToggleCursor ()
+    {
+        Cursor.visible = !Cursor.visible;
+        if (Cursor.visible)
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+    }
+    #endregion
+
+    // TODO: [Input] Refactor what's not needed.
+
+    #region BASIC LOCOMOTION INPUTS    
+        
     protected virtual void MoveCharacter ()
     {
         // Currently neeeded.
         _thirdPersonController.input.x = 0f;
         _thirdPersonController.input.y = 0f;
 
-        if (Input.GetButtonDown(_moveInput))
+        if (Input.GetButtonDown(_clickToMoveInput))
         {
-            print("Cursor raycast hit layer: " + _cameraRaycaster.CurrentLayerHit);
-
             switch (_cameraRaycaster.CurrentLayerHit)
             {
                 case Layer.Walkable:
                     // Movement.
-                    _currentClickTarget = _cameraRaycaster.Hit.point;
-                    print("Hit Walkable");
+                    Debug.Log("Clicked Walkable");
+                    _currentClickPoint = _cameraRaycaster.Hit.point;
+                    _currentStopRadius = _moveStopRadius;
+                    break;
+                case Layer.Enemy:
+                    // Attacking.
+                    Debug.Log("Clicked enemy.");
+                    _currentClickPoint = _cameraRaycaster.Hit.point;
+                    _currentStopRadius = _meleeAttackStopRadius;
                     break;
                 default:
-                    Debug.LogWarning("Raycasting to unhandled layer.");
+                    Debug.LogWarning("Raycasting to unhandled layer: " + _cameraRaycaster.CurrentLayerHit);
                     break;
             }
         }
-        Vector3 targetDirection = _currentClickTarget - transform.position;
-        if (targetDirection.magnitude > _targetThreshold)
+
+        Vector3 currentMoveDestination = _currentClickPoint - transform.position;
+
+        if (currentMoveDestination.magnitude >= _currentStopRadius)
         {
-            _thirdPersonController.input.x = targetDirection.x;
-            _thirdPersonController.input.y = targetDirection.z;
+            // Walk to destination.
+            _thirdPersonController.input.x = currentMoveDestination.x;
+            _thirdPersonController.input.y = currentMoveDestination.z;
         }
     }
 
@@ -185,28 +220,7 @@ public class InputController : MonoBehaviour
     }
 
     #endregion
-
-    private static void ToggleCursor()
-    {
-        Cursor.visible = !Cursor.visible;
-        if (Cursor.visible)
-        {
-            Cursor.lockState = CursorLockMode.None;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
-    }
-
-    private void HandleGamepadInput()
-    {
-        // TODO: [Input] Fix axis mapping to camera.
-        _thirdPersonController.input.x = Input.GetAxis(_horizontalInput);
-        _thirdPersonController.input.y = Input.GetAxis(_verticallInput);
-    }
-
-    // TODO: [Input] Refactor what's not needed.
+        
     #region Camera Methods
 
     protected virtual void CameraInput ()
@@ -250,4 +264,21 @@ public class InputController : MonoBehaviour
     }
 
     #endregion
+
+    private void OnDrawGizmos ()
+    {
+        // Movement Gizmos.
+        Gizmos.color = Color.black;
+        Gizmos.DrawLine(transform.position, _currentClickPoint);
+
+        if (_currentStopRadius == _meleeAttackStopRadius)
+        {
+            Gizmos.color = Color.red;
+        }
+
+        if ((_currentClickPoint - transform.position).magnitude > 0f)
+        {
+            Gizmos.DrawWireSphere(transform.position, _currentStopRadius); 
+        }
+    }
 }
