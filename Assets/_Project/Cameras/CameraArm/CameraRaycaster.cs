@@ -1,40 +1,45 @@
 ﻿using UnityEngine;
 
-#region HELPER CLASSES
+#region Helpers Classes
+
 /// <summary>
 /// Provides arguments to be sent with the LayerChanged event.
 /// </summary>
 public class LayerChangedEventArgs : System.EventArgs
 {
-    public Layer CurrentLayer { get; }
-
-    public LayerChangedEventArgs (Layer currentLayer)
+    public LayerChangedEventArgs(Layer currentLayer)
     {
         CurrentLayer = currentLayer;
     }
+
+    public Layer CurrentLayer { get; }
 }
+
 #endregion
 
 /// <summary>
-/// Responsible for raycasting from 
+/// Responsible for raycasting from
 /// the main camera to the mouse position.
 /// </summary>
 public class CameraRaycaster : MonoBehaviour
 {
     #region EVENTS
+
     public event System.EventHandler<LayerChangedEventArgs> LayerChanged;
 
     /// <summary>
     /// Method used to raise the event when the layer changed.
     /// </summary>
-    protected virtual void OnLayerChanged (Layer currentLayer)
+    protected virtual void OnLayerChanged(Layer currentLayer)
     {
         // Raises event, if subscribers are present.
         LayerChanged?.Invoke(this, new LayerChangedEventArgs(currentLayer));
     }
+
     #endregion
 
     #region FIELDS
+
     private Layer[] _layerPriorities =
     {
         // The order matters! More specific goes last.
@@ -43,7 +48,7 @@ public class CameraRaycaster : MonoBehaviour
         Layer.Enemy,
         Layer.Walkable,
     };
-    
+
     [SerializeField] private float _distanceToBackground = 100f;
     private Camera _viewCamera;
     #endregion
@@ -53,7 +58,7 @@ public class CameraRaycaster : MonoBehaviour
     public Layer CurrentLayerHit { get; private set; }
     #endregion
 
-    private void Start ()
+    private void Start()
     {
         _viewCamera = Camera.main;
     }
