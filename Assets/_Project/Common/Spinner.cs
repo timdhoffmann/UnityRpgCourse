@@ -6,10 +6,8 @@ public class Spinner : MonoBehaviour
     #region Fields
     [SerializeField]
     private float xRotationsPerMinute = 1.0f;
-
     [SerializeField]
     private float yRotationsPerMinute = 1.0f;
-
     [SerializeField]
     private float zRotationsPerMinute = 1.0f;
     #endregion
@@ -36,14 +34,15 @@ public class Spinner : MonoBehaviour
         //                      = (1                    /   -------          )  *   degrees             *   -------   frame^-1
         // Result:              ----------------------------------------------------------------------------------------------
         // degrees frame^-1     = xRotationsPerMinute   /   60                  *   360                 *   Time.DeltaTime
+        // More readable:       = xRotationsPerMinute   *   360                 *   Time.DeltaTime      /   60
 
-        var xDegreesPerFrame = 0.0f;
+        var xDegreesPerFrame = xRotationsPerMinute * 360 * Time.deltaTime / 60;
         transform.RotateAround(transform.position, transform.right, xDegreesPerFrame);
 
-        var yDegreesPerFrame = yRotationsPerMinute / 60 * 360 / Time.deltaTime;
+        var yDegreesPerFrame = yRotationsPerMinute * 360 * Time.deltaTime / 60;
         transform.RotateAround(transform.position, transform.up, yDegreesPerFrame);
 
-        var zDegreesPerFrame = 0.0f;
+        var zDegreesPerFrame = zRotationsPerMinute * 360 * Time.deltaTime / 60;
         transform.RotateAround(transform.position, transform.forward, zDegreesPerFrame);
     }
     #endregion

@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 
 #region Helpers Classes
-
 /// <summary>
 /// Provides arguments to be sent with the LayerChanged event.
 /// </summary>
@@ -14,7 +13,6 @@ public class LayerChangedEventArgs : System.EventArgs
 
     public Layer CurrentLayer { get; }
 }
-
 #endregion
 
 /// <summary>
@@ -24,7 +22,6 @@ public class LayerChangedEventArgs : System.EventArgs
 public class CameraRaycaster : MonoBehaviour
 {
     #region EVENTS
-
     public event System.EventHandler<LayerChangedEventArgs> LayerChanged;
 
     /// <summary>
@@ -35,11 +32,9 @@ public class CameraRaycaster : MonoBehaviour
         // Raises event, if subscribers are present.
         LayerChanged?.Invoke(this, new LayerChangedEventArgs(currentLayer));
     }
-
     #endregion
 
     #region FIELDS
-
     private Layer[] _layerPriorities =
     {
         // The order matters! More specific goes last.

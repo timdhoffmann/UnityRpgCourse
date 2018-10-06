@@ -1,9 +1,8 @@
 using Invector.CharacterController;
-using System;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-[RequireComponent(typeof (vThirdPersonController))]
+[RequireComponent(typeof(vThirdPersonController))]
 public class InputController : MonoBehaviour
 {
     #region FIELDS
@@ -33,7 +32,7 @@ public class InputController : MonoBehaviour
     private CameraRaycaster _cameraRaycaster;
     private Vector3 _currentClickPoint;
     // TODO: [Input] Refactor away.
-    protected vThirdPersonCamera _tpCamera;                // acess camera info    
+    protected vThirdPersonCamera _tpCamera;                // acess camera info
     #endregion
 
     private void Start()
@@ -47,7 +46,7 @@ public class InputController : MonoBehaviour
         }
     }
 
-    private void InitVariables ()
+    private void InitVariables()
     {
         _cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
         Assert.IsNotNull(_cameraRaycaster);
@@ -61,7 +60,7 @@ public class InputController : MonoBehaviour
         _currentClickPoint = transform.position;
     }
 
-    protected virtual void InitThirdPersonCharacter ()
+    protected virtual void InitThirdPersonCharacter()
     {
         _thirdPersonController.Init();
 
@@ -89,20 +88,20 @@ public class InputController : MonoBehaviour
         //    CameraInput();
     }
 
-    private void Update ()
+    private void Update()
     {
-        _thirdPersonController.UpdateMotor();                   // call ThirdPersonMotor methods               
-        _thirdPersonController.UpdateAnimator();                // call ThirdPersonAnimator methods		     
+        _thirdPersonController.UpdateMotor();                   // call ThirdPersonMotor methods
+        _thirdPersonController.UpdateAnimator();                // call ThirdPersonAnimator methods
     }
 
-    protected virtual void LateUpdate ()
+    protected virtual void LateUpdate()
     {
-        Assert.IsNotNull(_thirdPersonController);		    
+        Assert.IsNotNull(_thirdPersonController);
         HandleInput();
         //UpdateCameraStates();
     }
 
-    protected virtual void HandleInput ()
+    protected virtual void HandleInput()
     {
         if (!_thirdPersonController.lockMovement)
         {
@@ -119,7 +118,7 @@ public class InputController : MonoBehaviour
         }
     }
 
-    private void HandleMouseAndKeyboardInput ()
+    private void HandleMouseAndKeyboardInput()
     {
         HandleExitGameInput();
 
@@ -129,15 +128,14 @@ public class InputController : MonoBehaviour
     }
 
     #region GAMEPAD INPUT
-
-    private void HandleGamepadInput ()
+    private void HandleGamepadInput()
     {
         // TODO: [Input] Fix axis mapping to camera.
         _thirdPersonController.input.x = Input.GetAxis(_horizontalInput);
         _thirdPersonController.input.y = Input.GetAxis(_verticallInput);
     }
 
-    private static void ToggleCursor ()
+    private static void ToggleCursor()
     {
         Cursor.visible = !Cursor.visible;
         if (Cursor.visible)
@@ -153,9 +151,8 @@ public class InputController : MonoBehaviour
 
     // TODO: [Input] Refactor what's not needed.
 
-    #region BASIC LOCOMOTION INPUTS    
-        
-    protected virtual void MoveCharacter ()
+    #region BASIC LOCOMOTION INPUTS
+    protected virtual void MoveCharacter()
     {
         // Currently neeeded.
         _thirdPersonController.input.x = 0f;
@@ -171,12 +168,14 @@ public class InputController : MonoBehaviour
                     _currentClickPoint = _cameraRaycaster.Hit.point;
                     _currentStopRadius = _moveStopRadius;
                     break;
+
                 case Layer.Enemy:
                     // Attacking.
                     Debug.Log("Clicked enemy.");
                     _currentClickPoint = _cameraRaycaster.Hit.point;
                     _currentStopRadius = _meleeAttackStopRadius;
                     break;
+
                 default:
                     Debug.LogWarning("Raycasting to unhandled layer: " + _cameraRaycaster.CurrentLayerHit);
                     break;
@@ -193,7 +192,7 @@ public class InputController : MonoBehaviour
         }
     }
 
-    protected virtual void SprintInput ()
+    protected virtual void SprintInput()
     {
         if (Input.GetButtonDown(_sprintInput))
             _thirdPersonController.Sprint(true);
@@ -201,15 +200,15 @@ public class InputController : MonoBehaviour
             _thirdPersonController.Sprint(false);
     }
 
-    protected virtual void JumpInput ()
+    protected virtual void JumpInput()
     {
         if (Input.GetButtonDown(_jumpInput))
             _thirdPersonController.Jump();
     }
 
-    protected virtual void HandleExitGameInput ()
+    protected virtual void HandleExitGameInput()
     {
-        // just a example to quit the application 
+        // just a example to quit the application
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (!Cursor.visible)
@@ -218,12 +217,10 @@ public class InputController : MonoBehaviour
                 Application.Quit();
         }
     }
-
     #endregion
-        
-    #region Camera Methods
 
-    protected virtual void CameraInput ()
+    #region Camera Methods
+    protected virtual void CameraInput()
     {
         Assert.IsNotNull(_tpCamera);
 
@@ -235,11 +232,11 @@ public class InputController : MonoBehaviour
         // transform Character direction from camera if not KeepDirection
         if (!_keepDirection)
             _thirdPersonController.UpdateTargetDirection(_tpCamera != null ? _tpCamera.transform : null);
-        // rotate the character with the camera while strafing        
+        // rotate the character with the camera while strafing
         RotateWithCamera(_tpCamera != null ? _tpCamera.transform : null);
     }
 
-    protected virtual void UpdateCameraStates ()
+    protected virtual void UpdateCameraStates()
     {
         // CAMERA STATE - you can change the CameraState here, the bool means if you want lerp of not, make sure to use the same CameraState String that you named on _tpCameraListData
         if (_tpCamera == null)
@@ -255,17 +252,16 @@ public class InputController : MonoBehaviour
         }
     }
 
-    protected virtual void RotateWithCamera (Transform cameraTransform)
+    protected virtual void RotateWithCamera(Transform cameraTransform)
     {
         if (_thirdPersonController.isStrafing && !_thirdPersonController.lockMovement)
         {
             _thirdPersonController.RotateWithAnotherTransform(cameraTransform);
         }
     }
-
     #endregion
 
-    private void OnDrawGizmos ()
+    private void OnDrawGizmos()
     {
         // Movement Gizmos.
         Gizmos.color = Color.black;
@@ -278,7 +274,7 @@ public class InputController : MonoBehaviour
 
         if ((_currentClickPoint - transform.position).magnitude > 0f)
         {
-            Gizmos.DrawWireSphere(transform.position, _currentStopRadius); 
+            Gizmos.DrawWireSphere(transform.position, _currentStopRadius);
         }
     }
 }
