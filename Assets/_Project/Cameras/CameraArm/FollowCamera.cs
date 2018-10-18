@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class FollowCamera : MonoBehaviour 
+public class FollowCamera : MonoBehaviour
 {
     private GameObject _player;
 
-	// Use this for initialization
-	void Start () 
-	{
+    // Use this for initialization
+    private void Start()
+    {
         _player = GameObject.FindGameObjectWithTag("Player");
         Assert.IsNotNull(_player);
-	}
+    }
 
-    private void LateUpdate ()
+    private void LateUpdate()
     {
         transform.position = _player.transform.position;
     }

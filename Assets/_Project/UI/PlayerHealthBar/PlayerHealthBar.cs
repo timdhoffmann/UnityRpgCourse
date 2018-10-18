@@ -1,26 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(RawImage))]
 public class PlayerHealthBar : MonoBehaviour
 {
+    #region Fields
+    private RawImage healthBarRawImage;
+    private Player player;
+    #endregion
 
-    RawImage healthBarRawImage;
-    Player player;
-
+    #region Methods
     // Use this for initialization
-    void Start()
+    private void Start()
     {
         player = FindObjectOfType<Player>();
         healthBarRawImage = GetComponent<RawImage>();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         float xValue = -(player.CurrentHealthAsPercentage / 2f) - 0.5f;
         healthBarRawImage.uvRect = new Rect(xValue, 0f, 0.5f, 1f);
     }
+    #endregion
 }
