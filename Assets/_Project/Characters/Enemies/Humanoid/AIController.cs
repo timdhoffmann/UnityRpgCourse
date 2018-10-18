@@ -9,20 +9,28 @@ using UnityEngine.Assertions;
 [RequireComponent(typeof(NavMeshAgent))]
 public class AIController : MonoBehaviour
 {
-    public UnityEngine.AI.NavMeshAgent agent { get; private set; }             // the navmesh agent required for the path finding
-    public vThirdPersonController character { get; private set; } // the character we are controlling
-    public Transform target;                                    // target to aim for
+    #region Properties
+    // the navmesh Agent required for the path finding
+    public NavMeshAgent Agent { get; private set; } = null;
+
+    // the CharacterController we are controlling
+    public vThirdPersonController CharacterController { get; private set; } = null;
+    #endregion
+
+    // target to aim for
+    [SerializeField]
+    private Transform target = null;
 
     private void Start()
     {
         // get the components on the object we need ( should not be null due to require component so no need to check )
-        agent = GetComponentInChildren<UnityEngine.AI.NavMeshAgent>();
-        character = GetComponent<vThirdPersonController>();
+        Agent = GetComponentInChildren<UnityEngine.AI.NavMeshAgent>();
+        CharacterController = GetComponent<vThirdPersonController>();
 
-        agent.updateRotation = false;
-        agent.updatePosition = true;
+        Agent.updateRotation = false;
+        Agent.updatePosition = true;
 
-        character.Init();
+        CharacterController.Init();
     }
 
     private void Update()
@@ -31,48 +39,48 @@ public class AIController : MonoBehaviour
         {
         }
 
-        character.UpdateMotor();
-        character.UpdateAnimator();
+        CharacterController.UpdateMotor();
+        CharacterController.UpdateAnimator();
     }
 
     protected virtual void LateUpdate()
     {
         if (target != null)
         {
-            //agent.SetDestination(target.position);
+            //Agent.SetDestination(target.position);
         }
 
         MoveCharacter();
 
-        //if (agent.remainingDistance > agent.stoppingDistance)
+        //if (Agent.remainingDistance > Agent.stoppingDistance)
         //{
-        //    character.UpdateTargetDirection(target);
-        //    character.targetDirection = target.transform.position;
-        //    character.input.x = target.transform.position.x;
-        //    character.input.y = target.transform.position.z;
+        //    CharacterController.UpdateTargetDirection(target);
+        //    CharacterController.targetDirection = target.transform.position;
+        //    CharacterController.input.x = target.transform.position.x;
+        //    CharacterController.input.y = target.transform.position.z;
         //}
         //else
         //{
-        //    character.input.x = 0.0f;
-        //    character.input.y = 0.0f;
+        //    CharacterController.input.x = 0.0f;
+        //    CharacterController.input.y = 0.0f;
         //}
     }
 
     protected virtual void MoveCharacter()
     {
-        character.UpdateTargetDirection(target);
+        CharacterController.UpdateTargetDirection(target);
 
         // Currently neeeded.
-        character.input.x = 0f;
-        character.input.y = 0f;
+        CharacterController.input.x = 0f;
+        CharacterController.input.y = 0f;
 
         Vector3 currentMoveDestination = target.transform.position - transform.position;
 
-        if (currentMoveDestination.magnitude >= agent.stoppingDistance)
+        if (currentMoveDestination.magnitude >= Agent.stoppingDistance)
         {
             // Walk to destination.
-            character.input.x = currentMoveDestination.x;
-            character.input.y = currentMoveDestination.z;
+            CharacterController.input.x = currentMoveDestination.x;
+            CharacterController.input.y = currentMoveDestination.z;
         }
     }
 
