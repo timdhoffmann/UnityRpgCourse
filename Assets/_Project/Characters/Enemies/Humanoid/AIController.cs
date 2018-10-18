@@ -35,48 +35,37 @@ public class AIController : MonoBehaviour
 
     private void Update()
     {
+        if (target != null)
+        {
+            Agent.SetDestination(target.transform.position);
+        }
+
         CharacterController.UpdateMotor();
         CharacterController.UpdateAnimator();
     }
 
     protected virtual void LateUpdate()
     {
-        if (target != null)
-        {
-            //Agent.SetDestination(target.position);
-        }
-
         MoveCharacter();
-
-        //if (Agent.remainingDistance > Agent.stoppingDistance)
-        //{
-        //    CharacterController.UpdateTargetDirection(target);
-        //    CharacterController.targetDirection = target.transform.position;
-        //    CharacterController.input.x = target.transform.position.x;
-        //    CharacterController.input.y = target.transform.position.z;
-        //}
-        //else
-        //{
-        //    CharacterController.input.x = 0.0f;
-        //    CharacterController.input.y = 0.0f;
-        //}
     }
 
     protected virtual void MoveCharacter()
     {
         CharacterController.UpdateTargetDirection(target);
 
-        // Currently neeeded.
-        CharacterController.input.x = 0f;
-        CharacterController.input.y = 0f;
-
         Vector3 currentMoveDestination = target.transform.position - transform.position;
 
-        if (currentMoveDestination.magnitude >= Agent.stoppingDistance)
+        if (Agent.remainingDistance >= Agent.stoppingDistance)
         {
             // Walk to destination.
             CharacterController.input.x = currentMoveDestination.x;
             CharacterController.input.y = currentMoveDestination.z;
+        }
+        else
+        {
+            // Currently needed, because the character controller constantly updates movement.
+            CharacterController.input.x = 0f;
+            CharacterController.input.y = 0f;
         }
     }
 
