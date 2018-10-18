@@ -16,22 +16,32 @@ public class AIController : MonoBehaviour
     // the CharacterController we are controlling
     public vThirdPersonController CharacterController { get; private set; } = null;
 
-    // target to aim for
-    public Transform Target
+    // _targetPosition to aim for
+    public Vector3 TargetPosition
     {
-        get => target;
-        set => target = value;
+        get => _targetPosition;
+        set => _targetPosition = value;
     }
     #endregion
 
-    [SerializeField]
-    private Transform target = null;
+    [SerializeField] private float playerDetectionRadius = 5.0f;
+    [SerializeField] private Vector3 _targetPosition = Vector3.zero;
+
+    private Vector3 returnPosition = Vector3.zero;
+    private GameObject player = null;
 
     private void Start()
     {
         // get the components on the object we need ( should not be null due to require component so no need to check )
         Agent = GetComponentInChildren<UnityEngine.AI.NavMeshAgent>();
         CharacterController = GetComponent<vThirdPersonController>();
+
+        // Get external references.
+        player = GameObject.FindGameObjectWithTag("Player");
+        Assert.IsNotNull(player, "No GameObject with Tag 'Player' found");
+
+        // Set default values.
+        returnPosition = transform.position;
 
         Agent.updateRotation = false;
         Agent.updatePosition = true;
@@ -41,10 +51,9 @@ public class AIController : MonoBehaviour
 
     private void Update()
     {
-        if (Target != null)
-        {
-            Agent.SetDestination(Target.transform.position);
-        }
+        TargetPosition = DetectPlayer() ? player.transform.position : returnPosition;
+
+        Agent.SetDestination(TargetPosition);
 
         CharacterController.UpdateMotor();
         CharacterController.UpdateAnimator();
@@ -52,20 +61,19 @@ public class AIController : MonoBehaviour
 
     protected virtual void LateUpdate()
     {
-        MoveCharacter();
+        ControlMovement();
     }
 
-    protected virtual void MoveCharacter()
+    protected virtual void ControlMovement()
     {
-        CharacterController.UpdateTargetDirection(Target);
-
-        Vector3 currentMoveDestination = Agent.steeringTarget - transform.position;
+        // TODO: Refactor following two lines into one, if possible.
+        CharacterController.targetDirection = Agent.destination - transform.position;
 
         if (Agent.remainingDistance >= Agent.stoppingDistance)
         {
             // Walk to destination.
-            CharacterController.input.x = currentMoveDestination.x;
-            CharacterController.input.y = currentMoveDestination.z;
+            CharacterController.input.x = CharacterController.targetDirection.x;
+            CharacterController.input.y = CharacterController.targetDirection.z;
         }
         else
         {
@@ -74,5 +82,10 @@ public class AIController : MonoBehaviour
             CharacterController.input.x = 0f;
             CharacterController.input.y = 0f;
         }
+    }
+
+    private bool DetectPlayer()
+    {
+        return Vector3.Distance(transform.position, player.transform.position) <= playerDetectionRadius;
     }
 }
