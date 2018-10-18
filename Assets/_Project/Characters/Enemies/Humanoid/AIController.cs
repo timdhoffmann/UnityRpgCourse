@@ -15,9 +15,15 @@ public class AIController : MonoBehaviour
 
     // the CharacterController we are controlling
     public vThirdPersonController CharacterController { get; private set; } = null;
-    #endregion
 
     // target to aim for
+    public Transform Target
+    {
+        get => target;
+        set => target = value;
+    }
+    #endregion
+
     [SerializeField]
     private Transform target = null;
 
@@ -35,9 +41,9 @@ public class AIController : MonoBehaviour
 
     private void Update()
     {
-        if (target != null)
+        if (Target != null)
         {
-            Agent.SetDestination(target.transform.position);
+            Agent.SetDestination(Target.transform.position);
         }
 
         CharacterController.UpdateMotor();
@@ -51,9 +57,9 @@ public class AIController : MonoBehaviour
 
     protected virtual void MoveCharacter()
     {
-        CharacterController.UpdateTargetDirection(target);
+        CharacterController.UpdateTargetDirection(Target);
 
-        Vector3 currentMoveDestination = target.transform.position - transform.position;
+        Vector3 currentMoveDestination = Agent.steeringTarget - transform.position;
 
         if (Agent.remainingDistance >= Agent.stoppingDistance)
         {
@@ -63,14 +69,10 @@ public class AIController : MonoBehaviour
         }
         else
         {
+            // Stop.
             // Currently needed, because the character controller constantly updates movement.
             CharacterController.input.x = 0f;
             CharacterController.input.y = 0f;
         }
-    }
-
-    public void SetTarget(Transform target)
-    {
-        this.target = target;
     }
 }
