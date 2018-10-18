@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.unity.assetbundlebrowser": "1.7.0",
     "com.unity.package-manager-ui": "2.0.2",
     "com.unity.probuilder": "3.0.9",
     "com.unity.progrids": "3.0.3-preview.0",
