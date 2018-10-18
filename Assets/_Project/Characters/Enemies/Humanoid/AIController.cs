@@ -10,7 +10,7 @@ using UnityEngine.Assertions;
 public class AIController : MonoBehaviour
 {
     #region Properties
-    // the navmesh Agent required for the path finding
+    // the nav mesh Agent required for the path finding
     public NavMeshAgent Agent { get; private set; } = null;
 
     // the CharacterController we are controlling
@@ -24,11 +24,13 @@ public class AIController : MonoBehaviour
     }
     #endregion
 
+    #region Fields
     [SerializeField] private float playerDetectionRadius = 5.0f;
-    [SerializeField] private Vector3 _targetPosition = Vector3.zero;
 
-    private Vector3 returnPosition = Vector3.zero;
-    private GameObject player = null;
+    private Vector3 _targetPosition = Vector3.zero;
+    private Vector3 _returnPosition = Vector3.zero;
+    private GameObject _player = null;
+    #endregion
 
     private void Start()
     {
@@ -37,11 +39,11 @@ public class AIController : MonoBehaviour
         CharacterController = GetComponent<vThirdPersonController>();
 
         // Get external references.
-        player = GameObject.FindGameObjectWithTag("Player");
-        Assert.IsNotNull(player, "No GameObject with Tag 'Player' found");
+        _player = GameObject.FindGameObjectWithTag("Player");
+        Assert.IsNotNull(_player, "No GameObject with Tag 'Player' found");
 
         // Set default values.
-        returnPosition = transform.position;
+        _returnPosition = transform.position;
 
         Agent.updateRotation = false;
         Agent.updatePosition = true;
@@ -51,7 +53,7 @@ public class AIController : MonoBehaviour
 
     private void Update()
     {
-        TargetPosition = DetectPlayer() ? player.transform.position : returnPosition;
+        TargetPosition = DetectPlayer() ? _player.transform.position : _returnPosition;
 
         Agent.SetDestination(TargetPosition);
 
@@ -86,6 +88,6 @@ public class AIController : MonoBehaviour
 
     private bool DetectPlayer()
     {
-        return Vector3.Distance(transform.position, player.transform.position) <= playerDetectionRadius;
+        return Vector3.Distance(transform.position, _player.transform.position) <= playerDetectionRadius;
     }
 }
