@@ -30,15 +30,11 @@ public class AIController : MonoBehaviour
         Agent.updateRotation = false;
         Agent.updatePosition = true;
 
-        CharacterController.Init();
+        //CharacterController.Init();
     }
 
     private void Update()
     {
-        if (target != null)
-        {
-        }
-
         CharacterController.UpdateMotor();
         CharacterController.UpdateAnimator();
     }
