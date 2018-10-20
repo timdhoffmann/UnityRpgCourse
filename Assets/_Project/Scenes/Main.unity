@@ -445,7 +445,7 @@ GameObject:
   - component: {fileID: 278976522}
   - component: {fileID: 278976521}
   - component: {fileID: 278976520}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1567,7 +1567,7 @@ GameObject:
   - component: {fileID: 368154007}
   - component: {fileID: 368154006}
   - component: {fileID: 368154011}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Icosphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23128,7 +23128,7 @@ GameObject:
   - component: {fileID: 1946974587}
   - component: {fileID: 1946974586}
   - component: {fileID: 1946974585}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Portal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
