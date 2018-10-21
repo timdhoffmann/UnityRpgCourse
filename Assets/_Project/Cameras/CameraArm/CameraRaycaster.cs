@@ -15,6 +15,7 @@ public class LayerChangedEventArgs : System.EventArgs
 }
 #endregion
 
+/// <inheritdoc />
 /// <summary>
 /// Responsible for raycasting from
 /// the main camera to the mouse position.
