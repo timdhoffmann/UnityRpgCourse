@@ -44,9 +44,9 @@ public class CameraRaycaster : MonoBehaviour
     [SerializeField] private int[] _layerPriorities = null;
     [SerializeField] private float _distanceToBackground = 100f;
 
-    private float maxRaycastDepth = 100.0f;
+    private readonly float _maxRaycastDepth = 100.0f;
     // So get ? from start with Default layer terrain
-    private int topPriorityLayerLastFrame = -1;
+    private int _topPriorityLayerLastFrame = -1;
     private Camera _camera;
     #endregion
 
@@ -95,7 +95,7 @@ public class CameraRaycaster : MonoBehaviour
 
         // Raycast to max depth, every frame as things can move under mouse
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit[] raycastHits = Physics.RaycastAll(ray, maxRaycastDepth);
+        RaycastHit[] raycastHits = Physics.RaycastAll(ray, _maxRaycastDepth);
 
         RaycastHit? priorityHit = FindTopPriorityHit(raycastHits);
         if (!priorityHit.HasValue) // if hit no priority object
@@ -117,9 +117,9 @@ public class CameraRaycaster : MonoBehaviour
 
     private void NotifyObserversIfLayerChanged(int newLayer)
     {
-        if (newLayer != topPriorityLayerLastFrame)
+        if (newLayer != _topPriorityLayerLastFrame)
         {
-            topPriorityLayerLastFrame = newLayer;
+            _topPriorityLayerLastFrame = newLayer;
             OnLayerChanged(newLayer);
         }
     }
