@@ -40,10 +40,9 @@ public class PriorityLayerClickedEventArgs : System.EventArgs
 public class CameraRaycaster : MonoBehaviour
 {
     #region FIELDS
+    // Propagated with values by CameraRaycasterEditor.cs.
     // Needs to match name in CameraRaycasterEditor.cs.
     [SerializeField] private int[] layerPriorities = null;
-
-    [SerializeField] private float _distanceToBackground = 100f;
 
     private readonly float _maxRaycastDepth = 100.0f;
     // So get ? from start with Default layer terrain

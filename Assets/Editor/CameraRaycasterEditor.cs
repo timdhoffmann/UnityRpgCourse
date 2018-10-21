@@ -1,11 +1,10 @@
 ﻿using UnityEditor;
 
-
 // TODO consider changing to a property drawer
 [CustomEditor(typeof(CameraRaycaster))]
 public class CameraRaycasterEditor : Editor
 {
-    bool isLayerPrioritiesUnfolded = true; // store the UI state
+    private bool isLayerPrioritiesUnfolded = true; // store the UI state
 
     public override void OnInspectorGUI()
     {
@@ -25,7 +24,7 @@ public class CameraRaycasterEditor : Editor
         serializedObject.ApplyModifiedProperties(); // De-serialize back to cameraRaycaster (and create undo point)
     }
 
-    void BindArraySize()
+    private void BindArraySize()
     {
         int currentArraySize = serializedObject.FindProperty("layerPriorities.Array.size").intValue;
         int requiredArraySize = EditorGUILayout.IntField("Size", currentArraySize);
@@ -35,7 +34,7 @@ public class CameraRaycasterEditor : Editor
         }
     }
 
-    void BindArrayElements()
+    private void BindArrayElements()
     {
         int currentArraySize = serializedObject.FindProperty("layerPriorities.Array.size").intValue;
         for (int i = 0; i < currentArraySize; i++)
