@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.EventSystems;
 
-#region Helpers Classes
+#region Helper Classes
 /// <summary>
 /// Provides arguments to be sent with the LayerChanged event.
 /// </summary>
@@ -37,8 +39,29 @@ public class PriorityLayerClickedEventArgs : System.EventArgs
 /// </summary>
 public class CameraRaycaster : MonoBehaviour
 {
+    #region FIELDS
+    // TODO: Need to match name for editor script (remove "_")?
+    [SerializeField] private int[] _layerPriorities = null;
+    [SerializeField] private float _distanceToBackground = 100f;
+
+    private float maxRaycastDepth = 100.0f;
+    // So get ? from start with Default layer terrain
+    private int topPriorityLayerLastFrame = -1;
+    private Camera _camera;
+    #endregion
+
+    #region PROPERTIES
+    public RaycastHit Hit { get; private set; }
+    #endregion
+
+    private void Start()
+    {
+        _camera = Camera.main;
+    }
+
     #region EVENTS
-    // TODO: Check, which parameter-style is preferred (explicit or using an EventArgs class). The latter (see OnPriorityLayerClicked) was auto-implemented by ReSharper.
+    // TODO: Check, which parameter-style is preferred (explicit or using an EventArgs class). The latter (see OnPriorityLayerClicked) was auto-implemented by ReSharper and seems to introduce less coupling.
+
     public event System.EventHandler<LayerChangedEventArgs> LayerChanged;
     /// <summary>
     /// Method used to raise the event when the layer changed.
@@ -61,76 +84,71 @@ public class CameraRaycaster : MonoBehaviour
     }
     #endregion
 
-    #region FIELDS
-    // TODO: Need to match name for editor script (remove _)?
-    [SerializeField] private int[] _layerPriorities = null;
-    [SerializeField] private float _distanceToBackground = 100f;
-
-    private float _maxCameraDepth = 100.0f;
-    // So get ? from start with Default layer terrain
-    private int topPriorityLayerLastFrame = -1;
-    private Camera _viewCamera;
-    #endregion
-
-    #region PROPERTIES
-    public RaycastHit Hit { get; private set; }
-    public Layer CurrentLayerHit { get; private set; }
-    #endregion
-
-    private void Start()
-    {
-        _viewCamera = Camera.main;
-    }
-
     private void Update()
     {
-        // Look for and return priority layer hit
-        foreach (var layer in _layerPriorities)
+        // Check if cursor is over an interactable UI element
+        if (EventSystem.current.IsPointerOverGameObject())
         {
-            var hit = RaycastForLayer(layer);
-            if (hit.HasValue)
-            {
-                Hit = hit.Value;
-
-                // Checks if the layer has changed.
-                if (CurrentLayerHit != layer)
-                {
-                    CurrentLayerHit = layer;
-                    Debug.Log("CurrentLayerHit changed.");
-
-                    // Calls method to rise event.
-                    OnLayerChanged(layer);
-                }
-                return;
-            }
+            NotifyObserversIfLayerChanged(5);
+            return; // Stop looking for other objects
         }
 
-        // Otherwise return background hit
-        var backgroundHit = new RaycastHit
-        {
-            distance = _distanceToBackground
-        };
-        Hit = backgroundHit;
+        // Raycast to max depth, every frame as things can move under mouse
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit[] raycastHits = Physics.RaycastAll(ray, maxRaycastDepth);
 
-        CurrentLayerHit = Layer.RaycastEndStop;
+        RaycastHit? priorityHit = FindTopPriorityHit(raycastHits);
+        if (!priorityHit.HasValue) // if hit no priority object
+        {
+            NotifyObserversIfLayerChanged(0); // broadcast default layer
+            return;
+        }
+
+        // Notify delegates of layer change
+        var layerHit = priorityHit.Value.collider.gameObject.layer;
+        NotifyObserversIfLayerChanged(layerHit);
+
+        // Notify delegates of highest priority game object under mouse when clicked
+        if (Input.GetMouseButton(0))
+        {
+            OnPriorityLayerClicked(new PriorityLayerClickedEventArgs(priorityHit.Value, layerHit));
+        }
+    }
+
+    private void NotifyObserversIfLayerChanged(int newLayer)
+    {
+        if (newLayer != topPriorityLayerLastFrame)
+        {
+            topPriorityLayerLastFrame = newLayer;
+            OnLayerChanged(newLayer);
+        }
     }
 
     /// <summary>
-    /// Raycasts for a specified layer.
+    /// Finds the top priority layer hit.
     /// </summary>
-    /// <param name="layer">The layer to raycast.</param>
-    /// <returns>The layer hit or null.</returns>
-    private RaycastHit? RaycastForLayer(Layer layer) // Nullable return value type.
+    /// <param name="raycastHits"></param>
+    /// <returns>The hit with the top priority layer (or null!).</returns>
+    private RaycastHit? FindTopPriorityHit(RaycastHit[] raycastHits) // Nullable return value type.
     {
-        int layerMask = 1 << (int)layer; // See Unity docs for mask formation
-        Ray ray = _viewCamera.ScreenPointToRay(Input.mousePosition);
-
-        RaycastHit hit; // used as an out parameter
-        bool hasHit = Physics.Raycast(ray, out hit, _distanceToBackground, layerMask);
-        if (hasHit)
+        // Form list of layer numbers hit
+        var layersOfHitColliders = new List<int>();
+        foreach (var hit in raycastHits)
         {
-            return hit;
+            layersOfHitColliders.Add(hit.collider.gameObject.layer);
         }
-        return null;
+
+        // Step through layers in order of priority looking for a game object with that layer
+        foreach (var layer in _layerPriorities)
+        {
+            foreach (var hit in raycastHits)
+            {
+                if (hit.collider.gameObject.layer == layer)
+                {
+                    return hit; // stop looking
+                }
+            }
+        }
+        return null; // because cannot use GameObject? nullable
     }
 }
