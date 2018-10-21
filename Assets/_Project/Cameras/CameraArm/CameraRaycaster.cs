@@ -6,12 +6,27 @@
 /// </summary>
 public class LayerChangedEventArgs : System.EventArgs
 {
-    public LayerChangedEventArgs(Layer currentLayer)
-    {
-        CurrentLayer = currentLayer;
-    }
+    public int NewLayer { get; }
 
-    public Layer CurrentLayer { get; }
+    public LayerChangedEventArgs(int newLayer)
+    {
+        NewLayer = newLayer;
+    }
+}
+
+/// <summary>
+/// Provides arguments to be sent with the PriorityLayerClicked event.
+/// </summary>
+public class PriorityLayerClickedEventArgs : System.EventArgs
+{
+    public RaycastHit RaycastHit { get; }
+    public int LayerHit { get; }
+
+    public PriorityLayerClickedEventArgs(RaycastHit raycastHit, int layerHit)
+    {
+        RaycastHit = raycastHit;
+        LayerHit = layerHit;
+    }
 }
 #endregion
 
@@ -23,29 +38,37 @@ public class LayerChangedEventArgs : System.EventArgs
 public class CameraRaycaster : MonoBehaviour
 {
     #region EVENTS
+    // TODO: Check, which parameter-style is preferred (explicit or using an EventArgs class). The latter (see OnPriorityLayerClicked) was auto-implemented by ReSharper.
     public event System.EventHandler<LayerChangedEventArgs> LayerChanged;
-
     /// <summary>
     /// Method used to raise the event when the layer changed.
     /// </summary>
-    protected virtual void OnLayerChanged(Layer currentLayer)
+    protected virtual void OnLayerChanged(int newLayer)
     {
         // Raises event, if subscribers are present.
-        LayerChanged?.Invoke(this, new LayerChangedEventArgs(currentLayer));
+        LayerChanged?.Invoke(this, new LayerChangedEventArgs(newLayer));
+    }
+
+    public event System.EventHandler<PriorityLayerClickedEventArgs> PriorityLayerClicked;
+    /// <summary>
+    /// Method used to raise the event when the layer changed.
+    /// </summary>
+    /// <param name="e">EventArgs to be sent with the event (auto-implemented by ReSharper).</param>
+    protected virtual void OnPriorityLayerClicked(PriorityLayerClickedEventArgs e)
+    {
+        // Raises event, if subscribers are present.
+        PriorityLayerClicked?.Invoke(this, e);
     }
     #endregion
 
     #region FIELDS
-    private Layer[] _layerPriorities =
-    {
-        // The order matters! More specific goes last.
-        // TODO: Find better solution to avoid double management of layers.
-        Layer.Default,
-        Layer.Enemy,
-        Layer.Walkable,
-    };
-
+    // TODO: Need to match name for editor script (remove _)?
+    [SerializeField] private int[] _layerPriorities = null;
     [SerializeField] private float _distanceToBackground = 100f;
+
+    private float _maxCameraDepth = 100.0f;
+    // So get ? from start with Default layer terrain
+    private int topPriorityLayerLastFrame = -1;
     private Camera _viewCamera;
     #endregion
 
