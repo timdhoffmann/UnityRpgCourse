@@ -160,26 +160,26 @@ public class InputController : MonoBehaviour
 
         if (Input.GetButtonDown(_clickToMoveInput))
         {
-            switch (_cameraRaycaster.CurrentLayerHit)
-            {
-                case Layer.Walkable:
-                    // Movement.
-                    Debug.Log("Clicked Walkable");
-                    _currentClickPoint = _cameraRaycaster.Hit.point;
-                    _currentStopRadius = _moveStopRadius;
-                    break;
+            //switch (_cameraRaycaster.CurrentLayerHit)
+            //{
+            //    case Layer.Walkable:
+            //        // Movement.
+            //        Debug.Log("Clicked Walkable");
+            //        _currentClickPoint = _cameraRaycaster.Hit.point;
+            //        _currentStopRadius = _moveStopRadius;
+            //        break;
 
-                case Layer.Enemy:
-                    // Attacking.
-                    Debug.Log("Clicked enemy.");
-                    _currentClickPoint = _cameraRaycaster.Hit.point;
-                    _currentStopRadius = _meleeAttackStopRadius;
-                    break;
+            //    case Layer.Enemy:
+            //        // Attacking.
+            //        Debug.Log("Clicked enemy.");
+            //        _currentClickPoint = _cameraRaycaster.Hit.point;
+            //        _currentStopRadius = _meleeAttackStopRadius;
+            //        break;
 
-                default:
-                    Debug.LogWarning("Raycasting to unhandled layer: " + _cameraRaycaster.CurrentLayerHit);
-                    break;
-            }
+            //    default:
+            //        Debug.LogWarning("Raycasting to unhandled layer: " + _cameraRaycaster.CurrentLayerHit);
+            //        break;
+            //}
         }
 
         Vector3 currentMoveDestination = _currentClickPoint - transform.position;
