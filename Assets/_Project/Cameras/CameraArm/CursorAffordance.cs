@@ -7,6 +7,7 @@ using UnityEngine.Assertions;
 [RequireComponent(typeof(CameraRaycaster))]
 public class CursorAffordance : MonoBehaviour
 {
+    #region Fields
     [SerializeField] private Texture2D _standardCursor = null;
     [SerializeField] private Vector2 _standardCursorTopLeftOffset = new Vector2(0f, 0f);
     [SerializeField] private Texture2D _attackCursor = null;
@@ -14,6 +15,24 @@ public class CursorAffordance : MonoBehaviour
     [SerializeField] private Texture2D _unresolvedCursor = null;
 
     private CameraRaycaster _cameraRaycaster;
+
+    private enum Layer
+    {
+        Default,
+        TransparentFX,
+        IgnoreRaycast,
+        Unused3,
+        Water,
+        UI,
+        Unused6,
+        Unused7,
+        PostProcessing,
+        Player,
+        Walkable,
+        Enemy
+    }
+
+    #endregion
 
     private void OnEnable()
     {
@@ -48,11 +67,11 @@ public class CursorAffordance : MonoBehaviour
     {
         switch (e.NewLayer)
         {
-            case Layer.Walkable:
+            case (int)Layer.Walkable:
                 Cursor.SetCursor(_standardCursor, _standardCursorTopLeftOffset, CursorMode.Auto);
                 break;
 
-            case Layer.Enemy:
+            case (int)Layer.Enemy:
                 Assert.IsNotNull(_attackCursor);
                 Cursor.SetCursor(_attackCursor, _attackCursorTopLeftOffset, CursorMode.Auto);
                 break;
