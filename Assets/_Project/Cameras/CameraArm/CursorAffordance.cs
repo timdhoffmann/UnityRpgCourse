@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 
 [RequireComponent(typeof(CameraRaycaster))]
-public class CustomCursor : MonoBehaviour
+public class CursorAffordance : MonoBehaviour
 {
     [SerializeField] private Texture2D _standardCursor = null;
     [SerializeField] private Vector2 _standardCursorTopLeftOffset = new Vector2(0f, 0f);
@@ -46,7 +46,7 @@ public class CustomCursor : MonoBehaviour
     /// <param name="e">Additional information about the event.</param>
     private void OnLayerChanged(object sender, LayerChangedEventArgs e)
     {
-        switch (e.CurrentLayer)
+        switch (e.NewLayer)
         {
             case Layer.Walkable:
                 Cursor.SetCursor(_standardCursor, _standardCursorTopLeftOffset, CursorMode.Auto);
