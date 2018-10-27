@@ -4,6 +4,9 @@
 [CustomEditor(typeof(CameraRaycaster))]
 public class CameraRaycasterEditor : Editor
 {
+    // Names of referenced fields (to minimize string referencing).
+    private const string LayerPrioritiesField = "_layerPriorities";
+
     // Stores the UI state.
     private bool isLayerPrioritiesUnfolded = true;
 
@@ -31,8 +34,8 @@ public class CameraRaycasterEditor : Editor
             {
                 // Lines to be drawn indented.
 
-                BindArraySize("_layerPriorities");
-                BindArrayElements();
+                BindArraySize(LayerPrioritiesField);
+                BindArrayElements(LayerPrioritiesField);
             }
             // Un-indents contained lines.
             EditorGUI.indentLevel--;
@@ -79,18 +82,19 @@ public class CameraRaycasterEditor : Editor
     /// <summary>
     /// Modifies the content of the array (here, the layers represented as int).
     /// </summary>
-    private void BindArrayElements()
+    /// <param name="referencedField">Must match the property/field name.</param>
+    private void BindArrayElements(string referencedField)
     {
         // Gets the desired array's size from the serialized object.
-        int currentArraySize = serializedObject.FindProperty("_layerPriorities.Array.size").intValue;
+        int currentArraySize = serializedObject.FindProperty($"{referencedField}.Array.size").intValue;
 
         for (int i = 0; i < currentArraySize; i++)
         {
             // Finds the current array element's property (layer stored as int).
-            var prop = serializedObject.FindProperty(string.Format("_layerPriorities.Array.data[{0}]", i)); // for i = 0, "_layerPriorities.Array.data[0]"
+            var prop = serializedObject.FindProperty($"{referencedField}.Array.data[{i}]"); // for i = 0, "_layerPriorities.Array.data[0]"
 
             // Gets the respective layer, represented by the current int, from the layer settings.
-            prop.intValue = EditorGUILayout.LayerField(string.Format("Layer {0}:", i), prop.intValue);
+            prop.intValue = EditorGUILayout.LayerField($"Layer {i}:", prop.intValue);
         }
     }
     #endregion
