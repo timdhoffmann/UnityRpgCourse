@@ -40,11 +40,14 @@ public class PriorityLayerClickedEventArgs : System.EventArgs
 public class CameraRaycaster : MonoBehaviour
 {
     #region FIELDS
+    // NOTE: Fields will only show up in the editor, if explicitly handled
+    // by the editor script!
     // Propagated with values by CameraRaycasterEditor.cs.
     // Needs to match name in CameraRaycasterEditor.cs.
-    [SerializeField] private int[] layerPriorities = null;
+    [SerializeField] private int[] _layerPriorities = null;
 
     private readonly float _maxRaycastDepth = 100.0f;
+
     // So get ? from start with Default layer terrain
     private int _topPriorityLayerLastFrame = -1;
     private Camera _camera;
@@ -139,7 +142,7 @@ public class CameraRaycaster : MonoBehaviour
         }
 
         // Step through layers in order of priority looking for a game object with that layer
-        foreach (var layer in layerPriorities)
+        foreach (var layer in _layerPriorities)
         {
             foreach (var hit in raycastHits)
             {

@@ -31,7 +31,7 @@ public class CameraRaycasterEditor : Editor
             {
                 // Lines to be drawn indented.
 
-                BindArraySize();
+                BindArraySize("_layerPriorities");
                 BindArrayElements();
             }
             // Un-indents contained lines.
@@ -47,12 +47,23 @@ public class CameraRaycasterEditor : Editor
 
     #region Helper Methods
     /// <summary>
+    /// Creates an editable string property.
+    /// </summary>
+    /// <param name="referencedField">Must match the property/field name.</param>
+    private void AddStringProperty(string referencedField)
+    {
+        var property = serializedObject.FindProperty(referencedField);
+        property.stringValue = EditorGUILayout.TextField(referencedField, property.stringValue);
+    }
+
+    /// <summary>
     /// Modifies the size of the array.
     /// </summary>
-    private void BindArraySize()
+    /// <param name="referencedField">Must match the property/field name.</param>
+    private void BindArraySize(string referencedField)
     {
         // Gets the desired array's size from the serialized object.
-        int currentArraySize = serializedObject.FindProperty("layerPriorities.Array.size").intValue;
+        int currentArraySize = serializedObject.FindProperty($"{referencedField}.Array.size").intValue;
 
         // Draws an int field with the current array size.
         int requiredArraySize = EditorGUILayout.IntField("Size", currentArraySize);
@@ -61,7 +72,7 @@ public class CameraRaycasterEditor : Editor
         if (requiredArraySize != currentArraySize)
         {
             // Sets the array size to the required size.
-            serializedObject.FindProperty("layerPriorities.Array.size").intValue = requiredArraySize;
+            serializedObject.FindProperty($"{referencedField}.Array.size").intValue = requiredArraySize;
         }
     }
 
@@ -71,12 +82,12 @@ public class CameraRaycasterEditor : Editor
     private void BindArrayElements()
     {
         // Gets the desired array's size from the serialized object.
-        int currentArraySize = serializedObject.FindProperty("layerPriorities.Array.size").intValue;
+        int currentArraySize = serializedObject.FindProperty("_layerPriorities.Array.size").intValue;
 
         for (int i = 0; i < currentArraySize; i++)
         {
             // Finds the current array element's property (layer stored as int).
-            var prop = serializedObject.FindProperty(string.Format("layerPriorities.Array.data[{0}]", i)); // for i = 0, "layerPriorities.Array.data[0]"
+            var prop = serializedObject.FindProperty(string.Format("_layerPriorities.Array.data[{0}]", i)); // for i = 0, "_layerPriorities.Array.data[0]"
 
             // Gets the respective layer, represented by the current int, from the layer settings.
             prop.intValue = EditorGUILayout.LayerField(string.Format("Layer {0}:", i), prop.intValue);
