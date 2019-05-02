@@ -34,6 +34,11 @@ ExportedObj/
 *.booproj
 *.svd
 
+# ============================= #
+# Visual Studio Code generated  #
+# ============================= #
+\.vscode/
+
 # ============ #
 # OS generated #
 # ============ #
@@ -50,6 +55,7 @@ ehthumbs.db
 # Custom #
 # ======= #
 *__NoVersionControl*
+
 Assets/Plugins*
 
 Assets/ProBuilder Data/
@@ -60,4 +66,3 @@ Assets/UniCut/
 
 Assets/UniCut\.meta
 
-\.vscode/
